@@ -1,6 +1,10 @@
+GDAL and 6S
+===========
+
+Binding 6sV2.1 to GDAL using libfortrangis and OpenMP
 
 igeom: geometrical conditions
-=============================
+-----------------------------
 | igeom | Description           | Parameters     | Data Type | Unit |
 |:------|:---------------------:|:---------------|:----------|:-----|
 | 0     | Direct specification  | 1. solar zenith angle<br>2. solar azimuth angle<br>3. satellite zenith angle<br>4. satellite azimuth angle<br>5. month<br>6. day of the month<br>|Float<br>Float<br>Float<br>Float<br>Integer<br>Integer<br>|degrees<br>degrees<br>degrees<br>degrees<br>month<br>day<br>|
