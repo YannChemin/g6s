@@ -3,6 +3,8 @@ GDAL and 6S
 
 Binding 6sV2.1 to GDAL using libfortrangis and OpenMP
 
+WARNING ! Still in development !
+
 igeom: geometrical conditions
 -----------------------------
 | igeom | Description           | Parameters     | Data Type | Unit |
