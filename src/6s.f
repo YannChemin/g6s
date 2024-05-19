@@ -6,8 +6,11 @@
      s                    equatorcrossingascendantlongitude,
      s                    equatorcrossingascendantdechour,
      s                    centralpixellongitude, centralpixellatitude,
+     s                 inputatmosphereidcode,
+     s                    filenameradiosonde34,
+     s                    watercontent, ozonecontent,
      s                    outputpixelreflectance) 
-        ! Define the veriable incoming for geometry definition
+        ! Define the variable incoming for geometry definition
         integer, intent(in) :: inputgeometrycode
         real, intent(in)    :: solarzenithangledeg, solarazimuthangledeg
         real, intent(in)    :: satellitezenithangledeg, satelliteazimuthangledeg
@@ -16,6 +19,14 @@
         real, intent(in)    :: equatorcrossingascendantlongitude
         real, intent(in)    :: equatorcrossingascendantdechour
         real, intent(in)    :: centralpixellongitude, centralpixellatitude
+        ! Define the variable incoming for atmosphere definition
+        integer, intent(in) :: inputatmosphereidcode
+        ! This is only for idatm = 7, radiosonde 34 levels data
+        character, intent(in) :: filenameradiosonde34
+        ! This is only for idatm = 8, H2O and O3 contents (assumes us62 base)
+        real, intent(in)      :: watercontent, ozonecontent
+
+        ! Define output of subroutine
         real, intent(inout) :: outputpixelreflectance 
 c**********************************************************************c
 c                                                                      c
@@ -808,24 +819,45 @@ c**********************************************************************c
       uw=0.
       uo3=0.
 
-      read(iread,*) idatm
+      !read(iread,*) idatm
+      idatm = inputatmosphereidcode
 
+      if(idatm.eq.0) then
+c       we have to define an atmosphere to compute rayleigh optical depth
+        call us62
+      end if
 
-      if(idatm.eq.0) go to 5
-      if(idatm.eq.8) read(iread,*) uw,uo3
-      if(idatm.ne.7) go to 6
-      do k=1,34
-       read(iread,*) z(k),p(k),t(k),wh(k),wo(k)
-      end do
-      go to 5
-    6 if(idatm.eq.1)  call tropic
+      if(idatm.eq.1)  call tropic
       if(idatm.eq.2)  call midsum
       if(idatm.eq.3)  call midwin
       if(idatm.eq.4)  call subsum
       if(idatm.eq.5)  call subwin
       if(idatm.eq.6)  call us62
-c     we have to define an atmosphere to compute rayleigh optical depth
-    5 if(idatm.eq.0.or.idatm.eq.8)  call us62
+
+      ! This is the radiosonde data with 34 levels
+      if(idatm.eq.7) then
+        open(unit=10000, file=filenameradiosonde34, status='old', action='read')
+        do k=1,34
+            read(10000,*) z(k),p(k),t(k),wh(k),wo(k)
+        end do
+        close(10000)
+      end if
+
+      if(idatm.eq.8) then
+        !read(iread,*) uw,uo3
+        uw = watercontent
+        uo3 = ozonecontent
+c       we have to define an atmosphere to compute rayleigh optical depth
+        call us62
+      end if
+
+      if (idatm.gt.8) then
+        ! idatm is not yet defined, stop the program
+        write(*,'(a)') 'Error, this atmosphere definition is not yet defined' 
+        write(*,'(a, i3)') 'idatm = ', idatm 
+        error stop
+      end if
+
 
 c**********************************************************************c
 c      THIS OPTION IS NOT AVAILABLE THE CODE RUNS WITH IPOL=1          c

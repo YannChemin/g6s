@@ -37,22 +37,29 @@
         ! 0=self-defined
         ! 1=Meteosat, 2=GOES East, 3=GOES West, 4=AVHRR (PM), 5=AVHRR (AM)
         ! 6=HRV (SPOT), 7=TM (Landsat), >7 Undefined yet
-        integer :: inputgeometrycode
+        integer   :: inputgeometrycode
         ! if igeom=0, define sunza, sunazim, satza, satazim in degrees
-        real :: solarzenithangledeg, solarazimuthangledeg
-        real :: satellitezenithangledeg, satelliteazimuthangledeg
+        real      :: solarzenithangledeg, solarazimuthangledeg
+        real      :: satellitezenithangledeg, satelliteazimuthangledeg
         ! in all cases, define the month and the day of the month
-        integer :: monthnumber, dayofthemonth
+        integer   :: monthnumber, dayofthemonth
         ! if igeom != 0, define the decimal hour of sat overpass in UTC hh.ddd
-        real :: dechourutchhddd
+        real      :: dechourutchhddd
         ! if igeom == 1, 2 (3: only ncols), specify number of rows and columns
-        integer :: numberofcolumns, numberofrows
+        integer   :: numberofcolumns, numberofrows
         ! if igeom == 4, 5, specify long and hour of equatorial crossing
-        real :: equatorcrossingascendantlongitude
-        real :: equatorcrossingascendantdechour
+        real      :: equatorcrossingascendantlongitude
+        real      :: equatorcrossingascendantdechour
         ! if igeom == 6, 7, specify the long and lat of central pixel
-        real :: centralpixellongitude, centralpixellatitude
+        real      :: centralpixellongitude, centralpixellatitude
         
+        ! Define the variable incoming for atmosphere definition
+        integer   :: inputatmosphereidcode
+        ! This is only for idatm = 7, radiosonde 34 levels data
+        character :: filenameradiosonde34
+        ! This is only for idatm = 8, H2O and O3 contents (assumes us62 base)
+        real      :: watercontent, ozonecontent
+
         ! The OUTPUT pixel reflectance
         real :: outputpixelreflectance
 
@@ -126,6 +133,9 @@
      s                           equatorcrossingascendantlongitude,
      s                           equatorcrossingascendantdechour,
      s                           centralpixellongitude, centralpixellatitude,
+     s                        inputatmosphereidcode,
+     s                           filenameradiosonde34,
+     s                           watercontent, ozonecontent,
      s                           outputpixelreflectance)
                    array(i,j) = outputpixelreflectance 
                 end do
