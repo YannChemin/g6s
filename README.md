@@ -51,3 +51,10 @@ iaer: aerosol model(type) and profile
 | 10    | Junge Power-Law Distribution|                |Integer    |      |
 | 11    | Sun Photometer Distribution|1. radius<br>2. dV/d(logr)<br>|Float<br>Float<br>|nm<br>cm3/cm2/micron<br>|
 
+iaerp: print output of iaer=[8, 9, 10, 11]
+------------------------------------------
+| idatm | Description           | Parameters     | Data Type | Unit |
+|:------|:---------------------:|:---------------|:----------|:-----|
+| 0     | results will not be saved |            |Integer    |      |
+| 1     | results will be saved |File input (auto extension .mie)|Character|      |
+

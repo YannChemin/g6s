@@ -56,9 +56,14 @@
         ! Define the variable incoming for atmosphere definition
         integer   :: inputatmosphereidcode
         ! This is only for idatm = 7, radiosonde 34 levels data
-        character :: filenameradiosonde34
+        character(len=100) :: filenameradiosonde34
         ! This is only for idatm = 8, H2O and O3 contents (assumes us62 base)
         real      :: watercontent, ozonecontent
+
+        ! Define the variable incoming for aerosols definition
+        integer   :: inputaerosolidcode
+        ! This is only for iaer = 4, input filename with 4 volumetric parts
+        character(len=100) :: filenameaerosolvol
 
         ! The OUTPUT pixel reflectance
         real :: outputpixelreflectance
@@ -136,7 +141,9 @@
      s                        inputatmosphereidcode,
      s                           filenameradiosonde34,
      s                           watercontent, ozonecontent,
-     s                           outputpixelreflectance)
+     s                        inputaerosolidcode,
+     s                           filenameaerosolvol,
+     s                        outputpixelreflectance)
                    array(i,j) = outputpixelreflectance 
                 end do
                 !$omp end parallel do

@@ -9,7 +9,10 @@
      s                 inputatmosphereidcode,
      s                    filenameradiosonde34,
      s                    watercontent, ozonecontent,
-     s                    outputpixelreflectance) 
+     s                 inputaerosolidcode,
+     s                    filenameaerosolvol,
+     s                 outputpixelreflectance) 
+        
         ! Define the variable incoming for geometry definition
         integer, intent(in) :: inputgeometrycode
         real, intent(in)    :: solarzenithangledeg, solarazimuthangledeg
@@ -19,12 +22,18 @@
         real, intent(in)    :: equatorcrossingascendantlongitude
         real, intent(in)    :: equatorcrossingascendantdechour
         real, intent(in)    :: centralpixellongitude, centralpixellatitude
+
         ! Define the variable incoming for atmosphere definition
         integer, intent(in) :: inputatmosphereidcode
         ! This is only for idatm = 7, radiosonde 34 levels data
-        character, intent(in) :: filenameradiosonde34
+        character(len=100), intent(in) :: filenameradiosonde34
         ! This is only for idatm = 8, H2O and O3 contents (assumes us62 base)
         real, intent(in)      :: watercontent, ozonecontent
+        
+        ! Define the variable incoming for aerosols definition
+        integer, intent(in)   :: inputaerosolidcode
+        ! This is only for iaer = 4, input filename with 4 volumetric parts
+        character(len=100), intent(in) :: filenameaerosolvol
 
         ! Define output of subroutine
         real, intent(inout) :: outputpixelreflectance 
@@ -994,37 +1003,85 @@ c**********************************************************************c
       taer55=0.
       iaer_prof=0
  
-      read(iread,*) iaer
+      !read(iread,*) iaer
+      iaer = inputaerosolidcode
       
-c  the user-defined aerosol profile
+      ! iaer = -1 : the user-defined aerosol profile
       if (iaer.lt.0) then
-
-      total_height=0.0
-      iaer_prof=1
-      num_z=0
-      do i=0,50
-      alt_z(i)=0.0
-      taer55_z(i)=0.0
-      taer_z(i)=0.0
-      height_z(i)=0.0
-      enddo
-
-      read(5,*) num_z
-
-      do i=0,num_z-1
-       read(5,*) height_z(num_z-i),taer55_z(num_z-i),iaer
-       alt_z(num_z-1-i)=total_height+height_z(num_z-i)
-       total_height=total_height+height_z(num_z-i)
-       taer55=taer55+taer55_z(num_z-i)
-      enddo
-                
+        ! Initialize variables
+        total_height=0.0
+        iaer_prof=1
+        num_z=0
+        do i=0,50
+            alt_z(i)=0.0
+            taer55_z(i)=0.0
+            taer_z(i)=0.0
+            height_z(i)=0.0
+        enddo
+        ! Read from file
+        read(5,*) num_z
+        do i=0,num_z-1
+            read(5,*) height_z(num_z-i),taer55_z(num_z-i),iaer
+            alt_z(num_z-1-i)=total_height+height_z(num_z-i)
+            total_height=total_height+height_z(num_z-i)
+            taer55=taer55+taer55_z(num_z-i)
+        enddo
       endif
-c  the user-defined aerosol profile
-      
-      if (iaer.ge.0.and.iaer.le.7) nquad=nqdef_p
-      if (iaer.ge.8.and.iaer.le.11) nquad=nquad_p
 
-      if(iaer.eq.4) read(iread,*) (c(n),n=1,4)
+      ! iaer = 0 : no aerosols
+      if (aer.eq.0) then
+         nquad = nqdef_p 
+      end if
+      ! iaer = 1 : continental
+      if (aer.eq.1) then
+         nquad = nqdef_p 
+      end if
+      ! iaer = 2 : maritime
+      if (aer.eq.2) then
+         nquad = nqdef_p 
+      end if
+      ! iaer = 3 : urban
+      if (aer.eq.3) then
+         nquad = nqdef_p 
+      end if
+      ! iaer = 4 : volumetric percentages by type
+      if (aer.eq.4) then
+         nquad = nqdef_p 
+         !if(iaer.eq.4) read(iread,*) (c(n),n=1,4)
+         open(unit=10000, file=filenameaerosolvol, status='old', action='read')
+         read(10000,*) (c(n),n=1,4)
+         close(10000)
+      end if
+      ! iaer = 5 : background desert
+      if (aer.eq.5) then
+         nquad = nqdef_p 
+      end if
+      ! iaer = 6 : biomass burning
+      if (aer.eq.6) then
+         nquad = nqdef_p 
+      end if
+      ! iaer = 7 : stratospheric
+      if (aer.eq.7) then
+         nquad = nqdef_p 
+      end if
+      ! iaer = 8 : Multimodal Log-Normal distribution
+      if (aer.eq.8) then
+         nquad = nquad_p 
+      end if
+      ! iaer = 9 : Modified Gamma distribution
+      if (aer.eq.9) then
+         nquad = nquad_p 
+      end if
+      ! iaer = 10 : Junge Power-Law distribution
+      if (aer.eq.10) then
+         nquad = nquad_p 
+      end if
+      ! iaer = 11 : Sun Photometer distribution
+      if (aer.eq.11) then
+         nquad = nquad_p 
+      end if
+
+
       
       goto(49,40,41,42,49,49,49,49,43,44,45,46,47),iaer+1
  
