@@ -33,6 +33,10 @@
         ! Allocate metadata pointer (libfortrangis?)
         type(c_ptr_ptr) :: meta
 
+        ! INPUT/OUTPUT to 6s
+        ! The INPUT pixel reflectance
+        real      :: inputpixelvalue
+
         ! Geometric conditions
         ! 0=self-defined
         ! 1=Meteosat, 2=GOES East, 3=GOES West, 4=AVHRR (PM), 5=AVHRR (AM)
@@ -130,7 +134,9 @@
             do i=1,ncols
                 !$omp parallel do
                 do j=1,nrows
-                   call gsixs(inputgeometrycode,
+                   inputpixelvalue = array(i,j)
+                   call gsixs(inputpixelvalue,
+     s                        inputgeometrycode,
      s                           solarzenithangledeg, solarazimuthangledeg,
      s                           satellitezenithangledeg, satelliteazimuthangledeg,
      s                           monthnumber, dayofthemonth,

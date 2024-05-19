@@ -1,4 +1,5 @@
-      subroutine gsixs(inputgeometrycode,
+      subroutine gsixs(inputpixelvalue,
+     s                 inputgeometrycode,
      s                    solarzenithangledeg, solarazimuthangledeg,
      s                    satellitezenithangledeg, satelliteazimuthangledeg,
      s                    monthnumber, dayofthemonth,
@@ -13,6 +14,9 @@
      s                    filenameaerosolvol,
      s                 outputpixelreflectance) 
         
+        ! The INPUT pixel reflectance
+        real, intent(in)    :: inputpixelvalue
+
         ! Define the variable incoming for geometry definition
         integer, intent(in) :: inputgeometrycode
         real, intent(in)    :: solarzenithangledeg, solarazimuthangledeg
@@ -28,15 +32,15 @@
         ! This is only for idatm = 7, radiosonde 34 levels data
         character(len=100), intent(in) :: filenameradiosonde34
         ! This is only for idatm = 8, H2O and O3 contents (assumes us62 base)
-        real, intent(in)      :: watercontent, ozonecontent
+        real, intent(in)    :: watercontent, ozonecontent
         
         ! Define the variable incoming for aerosols definition
-        integer, intent(in)   :: inputaerosolidcode
+        integer, intent(in) :: inputaerosolidcode
         ! This is only for iaer = 4, input filename with 4 volumetric parts
         character(len=100), intent(in) :: filenameaerosolvol
 
         ! Define output of subroutine
-        real, intent(inout) :: outputpixelreflectance 
+        real, intent(out)   :: outputpixelreflectance 
 c**********************************************************************c
 c                                                                      c
 c                                                                      c
