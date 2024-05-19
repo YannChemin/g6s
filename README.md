@@ -31,5 +31,23 @@ idatm: atmospheric model
 | 5     | subarctic winter      |                |Integer    |      |
 | 6     | us standard 62        |                |Integer    |      |
 | 7     | Direct specification  |File input repeat:<br>1. Altitude<br>2. pressure<br>3. temperature<br>4. H20 density<br>5. O3 density<br>34 layers|<br>Float<br>Float<br>Float<br>Float<br>Float<br>|<br>Km<br>mbar<br>K<br>g/m3<br>g/m3<br>|
-| 8     | Direct specification  |1. water vapour (uw)<br>2. Ozone contents (uo3)<br>profile taken from us62<br>|Float<br>Float<br>|g/cm2<br>cm-atm<br>|
+| 8     | Direct specification  |1. water vapour (uw)<br>2. Ozone contents (uo3)<br>profile taken from us62<br>|Float<br>Float<br><br>|g/cm2<br>cm-atm<br><br>|
+
+iaer: aerosol model(type) and profile
+-------------------------------------
+| iaer  | Description           | Parameters     | Data Type | Unit |
+|:------|:---------------------:|:---------------|:----------|:-----|
+| -1    | Direct specification  |File input:<br>total number of layers<br>Repeat per layer:<br>altitude<br>AOD at 550nm<br>type of aerosol (1.dust-like;2.water-soluble;3.oceanic;4.soot)<br>|<br>Integer<br><br>Float<br>Float<br>Integer<br>|<br><br><br>Km<br>Km<br>|
+| 0     | no aerosols           |                |Integer    |      |
+| 1     | continental           |                |Integer    |      |
+| 2     | maritime              |                |Integer    |      |
+| 3     | urban                 |                |Integer    |      |
+| 4     | Define the volumetric percentage of each component|1. dust-like<br>2. water-soluble<br>3. oceanic<br>4. soot<br>|Float<br>Float<br>Float<br>Float<br>|[0.0-1.0]<br>[0.0-1.0]<br>[0.0-1.0]<br>[0.0-1.0]<br>|
+| 5     | background desert     |                |Integer    |      |
+| 6     | biomass burning       |                |Integer    |      |
+| 7     | stratospheric         |                |Integer    |      |
+| 8     | Multimodal Log-Normal Distribution (up to 4 modes)|                |Integer    |      |
+| 9     | Modified Gamma Distribution|                |Integer    |      |
+| 10    | Junge Power-Law Distribution|                |Integer    |      |
+| 11    | Sun Photometer Distribution|1. radius<br>2. dV/d(logr)<br>|Float<br>Float<br>|nm<br>cm3/cm2/micron<br>|
 
