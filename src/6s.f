@@ -13,6 +13,7 @@
      s                 inputaerosolidcode,
      s                    filenameaerosolvol,
      s                    outaerosolmie, outfilenameaerosolmie,
+     s                    filenameaerosolpho,
      s                 outputpixelreflectance) 
         
         ! The INPUT pixel reflectance
@@ -42,6 +43,8 @@
         ! This is only for iaer = 7, 8, 9, 10, 11, output mie to disk
         integer, intent(in) :: outaerosolmie
         character(len=100), intent(in) :: outfilenameaerosolmie
+        ! This is only for iaer = 11, input filename sun photometer
+        character(len=100), intent(in) :: filenameaerosolpho
 
         ! Define output of subroutine
         real, intent(out)   :: outputpixelreflectance 
@@ -1027,129 +1030,128 @@ c**********************************************************************c
             height_z(i)=0.0
         enddo
         ! Read from file
-        read(5,*) num_z
+        open(unit=10000, file=filenameaerosol, status='old', action='read')
+        read(10000,*) num_z
         do i=0,num_z-1
-            read(5,*) height_z(num_z-i),taer55_z(num_z-i),iaer
+            read(10000,*) height_z(num_z-i),taer55_z(num_z-i),iaer
             alt_z(num_z-1-i)=total_height+height_z(num_z-i)
             total_height=total_height+height_z(num_z-i)
             taer55=taer55+taer55_z(num_z-i)
         enddo
+        close(10000)
       endif
 
       ! iaer = 0 : no aerosols
       if (aer.eq.0) then
-         nquad = nqdef_p 
+        nquad = nqdef_p 
       end if
       ! iaer = 1 : continental
       if (aer.eq.1) then
-         nquad = nqdef_p 
+        nquad = nqdef_p 
+        c(1)=0.70
+        c(2)=0.29
+        c(3)=0.00
+        c(4)=0.01 
       end if
       ! iaer = 2 : maritime
       if (aer.eq.2) then
-         nquad = nqdef_p 
+        nquad = nqdef_p 
+        c(1)=0.00
+        c(2)=0.05
+        c(3)=0.95
+        c(4)=0.00     
       end if
       ! iaer = 3 : urban
       if (aer.eq.3) then
-         nquad = nqdef_p 
+        nquad = nqdef_p 
+        c(1)=0.17
+        c(2)=0.61
+        c(3)=0.00
+        c(4)=0.22
       end if
       ! iaer = 4 : volumetric percentages by type
       if (aer.eq.4) then
-         nquad = nqdef_p 
-         !if(iaer.eq.4) read(iread,*) (c(n),n=1,4)
-         open(unit=10000, file=filenameaerosolvol, status='old', action='read')
-         read(10000,*) (c(n),n=1,4)
-         close(10000)
+        nquad = nqdef_p 
+        !if(iaer.eq.4) read(iread,*) (c(n),n=1,4)
+        open(unit=10000, file=filenameaerosol, status='old', action='read')
+        read(10000,*) (c(n),n=1,4)
+        close(10000)
       end if
       ! iaer = 5 : background desert
       if (aer.eq.5) then
-         nquad = nqdef_p 
+        nquad = nqdef_p 
       end if
       ! iaer = 6 : biomass burning
       if (aer.eq.6) then
-         nquad = nqdef_p 
+        nquad = nqdef_p 
       end if
       ! iaer = 7 : stratospheric
       if (aer.eq.7) then
-         nquad = nqdef_p 
+        nquad = nqdef_p 
       end if
       ! iaer = 8 : Multimodal Log-Normal distribution
       if (aer.eq.8) then
-         nquad = nquad_p 
+        nquad = nquad_p 
+        open(unit=10000, file=filenameaerosol, status='old', action='read')
+        read(10000,*) rmin,rmax,icp
+        do i=1,icp
+            read(10000,*)x1(i),x2(i),cij(i)
+            read(10000,*)(rn(l,i),l=1,20)
+            read(10000,*)(ri(l,i),l=1,20)
+        enddo
+        close(10000)
+        do i=1,icp
+            cij_out(i)=cij(i)
+        enddo
       end if
       ! iaer = 9 : Modified Gamma distribution
       if (aer.eq.9) then
-         nquad = nquad_p 
+        nquad = nquad_p 
+        open(unit=10000, file=filenameaerosol, status='old', action='read')
+        read(10000,*) rmin,rmax
+        read(10000,*) x1(1),x2(1),x3(1)
+        read(10000,*)(rn(l,1),l=1,20)
+        read(10000,*)(ri(l,1),l=1,20)
+        close(10000)
       end if
       ! iaer = 10 : Junge Power-Law distribution
       if (aer.eq.10) then
-         nquad = nquad_p 
+        nquad = nquad_p 
+        open(unit=10000, file=filenameaerosol, status='old', action='read')
+        read(iread,*) rmin,rmax
+        read(iread,*) x1(1)
+        read(10000,*)(rn(l,1),l=1,20)
+        read(10000,*)(ri(l,1),l=1,20)
+        close(10000)
       end if
       ! iaer = 11 : Sun Photometer distribution
       if (aer.eq.11) then
-         nquad = nquad_p 
-      end if
-
-
-      !    -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11 ?
-      goto(49,40,41,42,49,49,49,49,43,44,45,46,47),iaer+1
- 
-      ! continental
-   40 c(1)=0.70
-      c(2)=0.29
-      c(3)=0.00
-      c(4)=0.01 
-      go to 49
-      ! oceanic
-   41 c(1)=0.00
-      c(2)=0.05
-      c(3)=0.95
-      c(4)=0.00     
-      go to 49
-      ! urban
-   42 c(1)=0.17
-      c(2)=0.61
-      c(3)=0.00
-      c(4)=0.22
-      go to 49
-      ! iaer = -1
-   43 read(iread,*) rmin,rmax,icp
-      do i=1,icp
-       read(5,*)x1(i),x2(i),cij(i)
-       read(5,*)(rn(l,i),l=1,20)
-       read(5,*)(ri(l,i),l=1,20)
-      enddo
-        do i=1,icp
-         cij_out(i)=cij(i)
+        nquad = nquad_p 
+        open(unit=10000, file=filenameaerosol, status='old', action='read')
+        read(10000,*)irsunph
+        do i=1,irsunph
+            read(10000,*)rsunph(i),nrsunph(i)
+            ! nrsunph(i)=nrsunph(i)/(rsunph(i)**4.)/(4*3.1415/3)
         enddo
-      go to 49
-   44 read(iread,*) rmin,rmax
-      read(iread,*) x1(1),x2(1),x3(1)
-      read(5,*)(rn(l,1),l=1,20)
-      read(5,*)(ri(l,1),l=1,20)
-      go to 49
-   45 read(iread,*) rmin,rmax
-      read(iread,*) x1(1)
-      read(5,*)(rn(l,1),l=1,20)
-      read(5,*)(ri(l,1),l=1,20)
-      go to 49
-
-      ! iaer = 11 sun photometer
-   46 read(5,*)irsunph
-      do i=1,irsunph
-       read(5,*)rsunph(i),nrsunph(i)
-       ! nrsunph(i)=nrsunph(i)/(rsunph(i)**4.)/(4*3.1415/3)
-      enddo
-      rmin=rsunph(1)
-      rmax=rsunph(irsunph)+1e-07
-      read(5,*)(rn(l,1),l=1,20)
-      read(5,*)(ri(l,1),l=1,20)
-      go to 49
-
-   47 read(5,'(A80)')FILE2
-      i2=index(FILE2,' ')-1
-      go to 49
-
-   49 continue
+        rmin=rsunph(1)
+        rmax=rsunph(irsunph)+1e-07
+        read(10000,*)(rn(l,1),l=1,20)
+        read(10000,*)(ri(l,1),l=1,20)
+        close(10000)
+      end if
+      ! iaer = 12 : Read from file directly
+      if (iaer.eq.12) then
+        FILE2 = filenameaerosol
+        !read(5,'(A80)')FILE2
+        i2=index(FILE2,' ')-1
+      end if
+      
+      if (iaer.gt.12) then
+        ! iaer is not yet defined, stop the program
+        write(*,'(a)') 'Error, this aerosol definition is not yet defined' 
+        write(*,'(a, i3)') 'iaer = ', iaer 
+        error stop
+      end if
 
       if (iaer.ge.8.and.iaer.le.11)then
         !read(5,*)iaerp
@@ -2935,8 +2937,8 @@ c --- aerosols model (type) ----
       endif
       if (iaer.eq.9) write(iwr,136)x1(1),x2(1),x3(1)
       if (iaer.eq.10) write(iwr,137)x1(1) 
-      if (iaerp.eq.1)write(iwr,139)FILE2(1:i2)
-      if (iaer.eq.12)write(iwr,138)FILE2(1:i2)
+      if (iaerp.eq.1) write(iwr,139)FILE2(1:i2)
+      if (iaer.eq.12) write(iwr,138)FILE2(1:i2)
       
 
 c --- aerosol model (concentration) ----

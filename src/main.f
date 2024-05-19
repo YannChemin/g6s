@@ -71,6 +71,8 @@
         ! This is only for iaer = 7, 8, 9, 10, 11
         integer   :: outaerosolmie = 0 ! Flag is off for raster processing
         character(len=100) :: outfilenameaerosolmie
+        ! This is only for iaer = 11, input filename sun photometer
+        character(len=100) :: filenameaerosolpho
 
         ! The OUTPUT pixel reflectance
         real :: outputpixelreflectance
@@ -153,6 +155,7 @@
      s                        inputaerosolidcode,
      s                           filenameaerosolvol,
      s                           outaerosolmie, outfilenameaerosolmie,
+     s                           filenameaerosolpho,
      s                        outputpixelreflectance)
                    array(i,j) = outputpixelreflectance 
                 end do
