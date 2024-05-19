@@ -42,7 +42,7 @@ iaer: aerosol model(type) and profile
 | 1     | continental           |                |Integer    |      |
 | 2     | maritime              |                |Integer    |      |
 | 3     | urban                 |                |Integer    |      |
-| 4     | Define the volumetric percentage of each component|1. dust-like<br>2. water-soluble<br>3. oceanic<br>4. soot<br>|Float<br>Float<br>Float<br>Float<br>|[0.0-1.0]<br>[0.0-1.0]<br>[0.0-1.0]<br>[0.0-1.0]<br>|
+| 4     | Define the volumetric percentage of each component|File input:<br>1. dust-like<br>2. water-soluble<br>3. oceanic<br>4. soot<br>|<br>Float<br>Float<br>Float<br>Float<br>|<br>[0.0-1.0]<br>[0.0-1.0]<br>[0.0-1.0]<br>[0.0-1.0]<br>|
 | 5     | background desert     |                |Integer    |      |
 | 6     | biomass burning       |                |Integer    |      |
 | 7     | stratospheric         |                |Integer    |      |
