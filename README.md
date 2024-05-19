@@ -37,7 +37,7 @@ iaer: aerosol model(type) and profile
 -------------------------------------
 | iaer  | Description           | Parameters     | Data Type | Unit |
 |:------|:---------------------:|:---------------|:----------|:-----|
-| -1    | Direct specification  |File input:<br>total number of layers<br>Repeat per layer:<br>altitude<br>AOD at 550nm<br>type of aerosol (1.dust-like;2.water-soluble;3.oceanic;4.soot)<br>|<br>Integer<br><br>Float<br>Float<br>Integer<br>|<br><br><br>Km<br>Km<br>|
+| -1    | Direct specification  |File input:<br>total number of layers<br>Repeat per layer:<br>1. altitude<br>2. AOD at 550nm<br>3. type of aerosol (1.dust-like;2.water-soluble;3.oceanic;4.soot)<br>|<br>Integer<br><br>Float<br>Float<br>Integer<br>|<br><br><br>Km<br>Km<br>|
 | 0     | no aerosols           |                |Integer    |      |
 | 1     | continental           |                |Integer    |      |
 | 2     | maritime              |                |Integer    |      |
