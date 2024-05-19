@@ -5,8 +5,18 @@
      s                    dechourutchhddd, numberofcolumns, numberofrows,
      s                    equatorcrossingascendantlongitude,
      s                    equatorcrossingascendantdechour,
-     s                    centralpixellongitude, centralpixellatitude
+     s                    centralpixellongitude, centralpixellatitude,
      s                    outputpixelreflectance) 
+        ! Define the veriable incoming for geometry definition
+        integer, intent(in) :: inputgeometrycode
+        real, intent(in)    :: solarzenithangledeg, solarazimuthangledeg
+        real, intent(in)    :: satellitezenithangledeg, satelliteazimuthangledeg
+        integer, intent(in) :: monthnumber, dayofthemonth
+        real, intent(in)    :: dechourutchhddd, numberofcolumns, numberofrows
+        real, intent(in)    :: equatorcrossingascendantlongitude
+        real, intent(in)    :: equatorcrossingascendantdechour
+        real, intent(in)    :: centralpixellongitude, centralpixellatitude
+        real, intent(inout) :: outputpixelreflectance 
 c**********************************************************************c
 c                                                                      c
 c                                                                      c

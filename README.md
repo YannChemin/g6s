@@ -18,3 +18,18 @@ igeom: geometrical conditions
 | 6     | HRV ( SPOT )          | 1. month<br>2. day of the month<br>3. decimal hour UTC<br>4. Central scene pixel longitude<br>5. Central scene pixel latitude<br>|Integer<br>Integer<br>Float<br>Float<br>Float<br>|month<br>day<br>time<br>degrees<br>degrees<br>| 
 | 7     | TM ( LANDSAT )        | 1. month<br>2. day of the month<br>3. decimal hour UTC<br>4. Central scene pixel longitude<br>5. Central scene pixel latitude<br>|Integer<br>Integer<br>Float<br>Float<br>Float<br>|month<br>day<br>time<br>degrees<br>degrees<br>| 
 
+
+idatm: atmospheric model
+------------------------
+| idatm | Description           | Parameters     | Data Type | Unit |
+|:------|:---------------------:|:---------------|:----------|:-----|
+| 0     | no gaseous absorption |                |Integer    |      |
+| 1     | tropical              |                |Integer    |      |
+| 2     | midlatitude summer    |                |Integer    |      |
+| 3     | midlatitude winter    |                |Integer    |      |
+| 4     | subarctic summer      |                |Integer    |      |
+| 5     | subarctic winter      |                |Integer    |      |
+| 6     | us standard 62        |                |Integer    |      |
+| 7     | Direct specification  |File input repeat:<br>1. Altitude<br>2. pressure<br>3. temperature<br>4. H20 density<br>5. O3 density<br>Max 34 layers|<br>Float<br>Float<br>Float<br>Float<br>Float<br>|<br>Km<br>mbar<br>K<br>g/m3<br>g/m3<br>|
+| 8     | Direct specification  |1. water vapour (uw)<br>2. Ozone contents (uo3)<br>profile taken from us62<br>|Float<br>Float<br>|g/cm2<br>cm-atm<br>|
+
