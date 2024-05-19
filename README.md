@@ -46,7 +46,7 @@ iaer: aerosol model(type) and profile
 | 5     | background desert     |                |Integer    |      |
 | 6     | biomass burning       |                |Integer    |      |
 | 7     | stratospheric         |                |Integer    |      |
-| 8     | Multimodal Log-Normal Distribution (up to 4 modes)|rmin, rmax, icp<br>Repeat icp times:<br>1. x1, x2, cij<br>rn(l,i),l=1,20<br>|Float, Flaot, Integer<br>Integer (x3)<br>Float (x20)<br>|      |
+| 8     | Multimodal Log-Normal Distribution (up to 4 modes)|rmin, rmax, icp<br>Repeat icp times:<br>1. x1, x2, cij<br>2. rn(l,i),l=1,20<br>|Float, Flaot, Integer<br>Integer (x3)<br>Float (x20)<br>|      |
 | 9     | Modified Gamma Distribution|rmin, rmax<br>x1, x2, x3<br>rn(l,1),l=1,20<br>ri(l,1),l=1,20|Float (x2)<br>Integer (x3)<br>Float (x20)<br>Float (x20)|      |
 | 10    | Junge Power-Law Distribution|rmin, rmax<br>x1<br>rn(l,1),l=1,20<br>ri(l,1),l=1,20|Float (x2)<br>Integer<br>Float (x20)<br>Float (x20)|      |
 | 11    | Sun Photometer Distribution|1. radius<br>2. dV/d(logr)<br>|Float<br>Float<br>|nm<br>cm3/cm2/micron<br>|

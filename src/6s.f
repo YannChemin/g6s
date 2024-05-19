@@ -11,9 +11,8 @@
      s                    filenameradiosonde34,
      s                    watercontent, ozonecontent,
      s                 inputaerosolidcode,
-     s                    filenameaerosolvol,
+     s                    filenameaerosol,
      s                    outaerosolmie, outfilenameaerosolmie,
-     s                    filenameaerosolpho,
      s                 outputpixelreflectance) 
         
         ! The INPUT pixel reflectance
@@ -38,13 +37,11 @@
         
         ! Define the variable incoming for aerosols definition
         integer, intent(in) :: inputaerosolidcode
-        ! This is only for iaer = 4, input filename with 4 volumetric parts
-        character(len=100), intent(in) :: filenameaerosolvol
-        ! This is only for iaer = 7, 8, 9, 10, 11, output mie to disk
+        ! This is for a file input iaer = [-1, 4, 8, 9, 10, 11, 12]
+        character(len=100), intent(in) :: filenameaerosol
+        ! This is only for iaer = [7, 8, 9, 10, 11], output mie to disk
         integer, intent(in) :: outaerosolmie
         character(len=100), intent(in) :: outfilenameaerosolmie
-        ! This is only for iaer = 11, input filename sun photometer
-        character(len=100), intent(in) :: filenameaerosolpho
 
         ! Define output of subroutine
         real, intent(out)   :: outputpixelreflectance 
@@ -1118,8 +1115,8 @@ c**********************************************************************c
       if (aer.eq.10) then
         nquad = nquad_p 
         open(unit=10000, file=filenameaerosol, status='old', action='read')
-        read(iread,*) rmin,rmax
-        read(iread,*) x1(1)
+        read(10000,*) rmin,rmax
+        read(10000,*) x1(1)
         read(10000,*)(rn(l,1),l=1,20)
         read(10000,*)(ri(l,1),l=1,20)
         close(10000)

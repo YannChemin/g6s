@@ -66,13 +66,11 @@
 
         ! Define the variable incoming for aerosols definition
         integer   :: inputaerosolidcode
-        ! This is only for iaer = 4, input filename with 4 volumetric parts
-        character(len=100) :: filenameaerosolvol
+        ! This is for a file input iaer = [-1, 4, 8, 9, 10, 11, 12]
+        character(len=100) :: filenameaerosol
         ! This is only for iaer = 7, 8, 9, 10, 11
         integer   :: outaerosolmie = 0 ! Flag is off for raster processing
         character(len=100) :: outfilenameaerosolmie
-        ! This is only for iaer = 11, input filename sun photometer
-        character(len=100) :: filenameaerosolpho
 
         ! The OUTPUT pixel reflectance
         real :: outputpixelreflectance
@@ -153,9 +151,8 @@
      s                           filenameradiosonde34,
      s                           watercontent, ozonecontent,
      s                        inputaerosolidcode,
-     s                           filenameaerosolvol,
+     s                           filenameaerosol,
      s                           outaerosolmie, outfilenameaerosolmie,
-     s                           filenameaerosolpho,
      s                        outputpixelreflectance)
                    array(i,j) = outputpixelreflectance 
                 end do
