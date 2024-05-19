@@ -12,6 +12,7 @@
      s                    watercontent, ozonecontent,
      s                 inputaerosolidcode,
      s                    filenameaerosolvol,
+     s                    outaerosolmie, outfilenameaerosolmie,
      s                 outputpixelreflectance) 
         
         ! The INPUT pixel reflectance
@@ -38,6 +39,9 @@
         integer, intent(in) :: inputaerosolidcode
         ! This is only for iaer = 4, input filename with 4 volumetric parts
         character(len=100), intent(in) :: filenameaerosolvol
+        ! This is only for iaer = 7, 8, 9, 10, 11, output mie to disk
+        integer, intent(in) :: outaerosolmie
+        character(len=100), intent(in) :: outfilenameaerosolmie
 
         ! Define output of subroutine
         real, intent(out)   :: outputpixelreflectance 
@@ -1086,24 +1090,28 @@ c**********************************************************************c
       end if
 
 
-      
+      !    -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11 ?
       goto(49,40,41,42,49,49,49,49,43,44,45,46,47),iaer+1
  
+      ! continental
    40 c(1)=0.70
       c(2)=0.29
       c(3)=0.00
       c(4)=0.01 
       go to 49
+      ! oceanic
    41 c(1)=0.00
       c(2)=0.05
       c(3)=0.95
       c(4)=0.00     
       go to 49
+      ! urban
    42 c(1)=0.17
       c(2)=0.61
       c(3)=0.00
       c(4)=0.22
       go to 49
+      ! iaer = -1
    43 read(iread,*) rmin,rmax,icp
       do i=1,icp
        read(5,*)x1(i),x2(i),cij(i)
@@ -1124,16 +1132,19 @@ c**********************************************************************c
       read(5,*)(rn(l,1),l=1,20)
       read(5,*)(ri(l,1),l=1,20)
       go to 49
+
+      ! iaer = 11 sun photometer
    46 read(5,*)irsunph
       do i=1,irsunph
        read(5,*)rsunph(i),nrsunph(i)
-C       nrsunph(i)=nrsunph(i)/(rsunph(i)**4.)/(4*3.1415/3)
+       ! nrsunph(i)=nrsunph(i)/(rsunph(i)**4.)/(4*3.1415/3)
       enddo
       rmin=rsunph(1)
       rmax=rsunph(irsunph)+1e-07
       read(5,*)(rn(l,1),l=1,20)
       read(5,*)(ri(l,1),l=1,20)
       go to 49
+
    47 read(5,'(A80)')FILE2
       i2=index(FILE2,' ')-1
       go to 49
@@ -1141,11 +1152,15 @@ C       nrsunph(i)=nrsunph(i)/(rsunph(i)**4.)/(4*3.1415/3)
    49 continue
 
       if (iaer.ge.8.and.iaer.le.11)then
-       read(5,*)iaerp
-       if (iaerp.eq.1)read(5,'(A80)')FILE
-       i1=index(FILE,' ')-1
-       FILE2=FILE(1:I1)//'.mie'
-       i2=index(FILE2,' ')-1
+        !read(5,*)iaerp
+        iaerp = outaerosolmie 
+        if (iaerp.eq.1) then
+            !read(5,'(A80)')FILE
+            FILE = outfilenameaerosolmie
+        end if
+        i1 = index(FILE,' ')-1
+        FILE2 = FILE(1:I1)//'.mie'
+        i2 = index(FILE2,' ')-1
       endif
 
       call aeroso(iaer,c,xmud,wldis,FILE2,ipol)
