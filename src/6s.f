@@ -13,6 +13,7 @@
      s                 inputaerosolidcode,
      s                    filenameaerosol,
      s                    outaerosolmie, outfilenameaerosolmie,
+     s                    visibility, aodat550nm,
      s                 outputpixelreflectance) 
         
         ! The INPUT pixel reflectance
@@ -43,8 +44,12 @@
         integer, intent(in) :: outaerosolmie
         character(len=100), intent(in) :: outfilenameaerosolmie
 
+        ! Define visibility and/or AOD at 550nm
+        real, intent(in)    :: visibility, aodat550nm
+
         ! Define output of subroutine
         real, intent(out)   :: outputpixelreflectance 
+
 c**********************************************************************c
 c                                                                      c
 c                                                                      c
@@ -1069,6 +1074,7 @@ c**********************************************************************c
       ! iaer = 4 : volumetric percentages by type
       if (aer.eq.4) then
         nquad = nqdef_p 
+        ! Read from file
         !if(iaer.eq.4) read(iread,*) (c(n),n=1,4)
         open(unit=10000, file=filenameaerosol, status='old', action='read')
         read(10000,*) (c(n),n=1,4)
@@ -1089,6 +1095,7 @@ c**********************************************************************c
       ! iaer = 8 : Multimodal Log-Normal distribution
       if (aer.eq.8) then
         nquad = nquad_p 
+        ! Read from file
         open(unit=10000, file=filenameaerosol, status='old', action='read')
         read(10000,*) rmin,rmax,icp
         do i=1,icp
@@ -1104,6 +1111,7 @@ c**********************************************************************c
       ! iaer = 9 : Modified Gamma distribution
       if (aer.eq.9) then
         nquad = nquad_p 
+        ! Read from file
         open(unit=10000, file=filenameaerosol, status='old', action='read')
         read(10000,*) rmin,rmax
         read(10000,*) x1(1),x2(1),x3(1)
@@ -1114,6 +1122,7 @@ c**********************************************************************c
       ! iaer = 10 : Junge Power-Law distribution
       if (aer.eq.10) then
         nquad = nquad_p 
+        ! Read from file
         open(unit=10000, file=filenameaerosol, status='old', action='read')
         read(10000,*) rmin,rmax
         read(10000,*) x1(1)
@@ -1124,6 +1133,7 @@ c**********************************************************************c
       ! iaer = 11 : Sun Photometer distribution
       if (aer.eq.11) then
         nquad = nquad_p 
+        ! Read from file
         open(unit=10000, file=filenameaerosol, status='old', action='read')
         read(10000,*)irsunph
         do i=1,irsunph
@@ -1136,7 +1146,7 @@ c**********************************************************************c
         read(10000,*)(ri(l,1),l=1,20)
         close(10000)
       end if
-      ! iaer = 12 : Read from file directly
+      ! iaer = 12 : Read from file directly in aeroso()
       if (iaer.eq.12) then
         FILE2 = filenameaerosol
         !read(5,'(A80)')FILE2
@@ -1184,21 +1194,24 @@ c                                                                      c
 c**********************************************************************c
 
       if (iaer_prof.eq.0) then
-
-      read(iread,*) v
-      if (v < 0) then
-        goto 71
-      else if (v == 0) then
-        goto 10
-      else
-        goto 11
-      end if
-   10 read(iread,*) taer55
-      v=exp(-log(taer55/2.7628)/0.79902)
-      goto 71
-   11 call oda550(iaer,v,taer55)
-  
-   71 continue
+        v = visibility
+        if (v < 0) then
+            ! Visibility is not needed
+            if (iaer.ne.0) then
+                ! iaer should be = 0 in this case
+                write(*,'(a)') 'Error, visibility = 0 but aerosol model != 0' 
+                write(*,'(a, i3)') 'iaer = ', iaer 
+                error stop
+            end if
+        else if (v == 0) then
+            ! We have the AOD at 550nm
+            taer55 = aodat550nm
+            ! We create the visibility estimate
+            v=exp(-log(taer55/2.7628)/0.79902)
+        else
+            ! Visibility exists, we compute an estimate of AOD at 550nm
+            call oda550(iaer,v,taer55)
+        end if
       endif
 
 c**********************************************************************c

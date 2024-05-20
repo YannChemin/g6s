@@ -72,8 +72,11 @@
         integer   :: outaerosolmie = 0 ! Flag is off for raster processing
         character(len=100) :: outfilenameaerosolmie
 
+        ! Define visibility and/or AOD at 550nm
+        real      :: visibility, aodat550nm
+
         ! The OUTPUT pixel reflectance
-        real :: outputpixelreflectance
+        real      :: outputpixelreflectance
 
         ! Start loading Raster Data
 
@@ -130,7 +133,7 @@
             ! load iteratively the band hadle of the output dataset dsOut
             OutBandH = GDALGetRasterBand(dsOut, band)
 
-            ! Load pixels into 1D array
+            ! Load pixels into 2D array
             err = GDALRasterIO(bandH,GF_Read,offcol,offrow,ncols,nrows,a_ptr,SIZE(array,1),SIZE(array,2),GDT_Float64,0,0)
 
             ! Do for columns and rows
@@ -153,6 +156,7 @@
      s                        inputaerosolidcode,
      s                           filenameaerosol,
      s                           outaerosolmie, outfilenameaerosolmie,
+     s                           visibility, aodat550nm,
      s                        outputpixelreflectance)
                    array(i,j) = outputpixelreflectance 
                 end do
@@ -160,7 +164,8 @@
             end do
 
             ! Write output array to the band handle in the output file
-            err = GDALRasterIO(OutBandH,GF_Write,offcol,offrow,ncols,nrows,a_ptr,SIZE(array,1),SIZE(array,2),GDT_Float64,0,0)
+            err = GDALRasterIO(OutBandH,GF_Write,offcol,offrow,ncols,nrows,
+     s                  a_ptr,SIZE(array,1),SIZE(array,2),GDT_Float64,0,0)
         end do
     
         ! Deallocate
