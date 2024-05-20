@@ -1573,152 +1573,107 @@ c       199  DMC    band 3           (0.7525-0.9275)                   c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************c
       do l=iinf,isup
-       s(l)=1.
+        s(l)=1.
       end do
 
-      read(iread,*) iwave
+      !read(iread,*) iwave
+      iwave = inputwaveidcode
 
-      if (iwave.eq.-2) goto 1600
-      if (iwave < 0) then
-        goto 16
-      else if (iwave == 0) then
-        goto 17
-      else
-        goto 18
+      if (iwave.eq.-2) then
+            !1600 read(iread,*) wlinf,wlsup
+            wlinf = wavelengthinf
+            wlsup = wavelengthsup
       end if
 
-   16 read(iread,*) wl
+      if (iwave.eq.-1) then
+            !16 read(iread,*) wl
+            wl = wavelength
+            wlinf=wl
+            wlsup=wl
+      end if
 
-      wlinf=wl
-      wlsup=wl
-      go to 19
-   17 read(iread,*) wlinf,wlsup
-      go to 19
- 1600 read(iread,*) wlinf,wlsup
-      go to 19
-c       110
-c       111     band of meteosat        (2)
-c       112     band of goes            (3,4)
-c       114     band of avhr            (5,16)
-c       118     band of hrv1            (17,24)
-c       121     band of tm              (25,30)
-c       127     band of mss             (31,34)
-c       128     band of MAS             (35,41)
-c       129     MODIS   band            (42,49)
-c       130     band of avhrr           (50,53)
-c       131     POLDER  band            (54,61)
-c       113     SEAWIFS band            (62,69)
-c       150     AATSR   band            (70,73)
-c       151     MERIS   band            (74,88)
-c       152     GLI     band            (89,118)
-c       153     ALI     band            (119,127)
-c       154     ASTER   band            (128,137)
-c       155     ETM     band            (138,143)
-c       156     HYPBLUE band            (144,145)
-c       157     VGT     band            (146,149)
-c       159     VIIRS   band            (149,164)
-c       161     LDCM    band            (165,173)
-c       162     MODIS1km band           (174,185)
-c       163     CAVIS    band           (186,196)
-c       164     DMC      band           (197,199)
+      if (iwave == 0) then
+            wlinf = wavelengthinf
+            wlsup = wavelengthsup
+      end if
 
+      if (iwave == 1) then
+            !110 read(iread,*) wlinf,wlsup
+            wlinf = wavelengthinf
+            wlsup = wavelengthsup
+            iinf=(wlinf-.25)/0.0025+1.5
+            isup=(wlsup-.25)/0.0025+1.5
+            do ik=iinf,isup
+                s(ik)=0.
+            end do
+            open(unit=10000, file=filenameiwave, status='old', action='read')
+            read(10000,*) (s(i),i=iinf,isup)
+            close(10000)
+      end if
+      
+      if (iwave > 1) then
+          if(iwave == 2) then
+            call meteo
+          else if (iwave.eq.3 .or. iwave.eq.4) then
+            call goes(iwave-2)
+          else if (iwave.gt.4 .and. iwave.le.16) then
+            call avhrr(iwave-4)
+          else if (iwave.gt.16 .and. iwave.le.24) then
+            call hrv(iwave-16)
+          else if (iwave.gt.24 .and. iwave.le.30) then
+            call tm(iwave-24)
+          else if (iwave.gt.30 .and. iwave.le.34) then
+            call mss(iwave-30)
+          else if (iwave.gt.34 .and. iwave.le.41) then
+            call mas(iwave-34)
+          else if (iwave.gt.41 .and. iwave.le.48) then
+            call modis(iwave-41)
+          else if (iwave.gt.48 .and. iwave.le.52) then
+            call avhrr(iwave-48)
+          else if (iwave.gt.52 .and. iwave.le.60) then
+            call polder(iwave-52)
+          else if (iwave.gt.60 .and. iwave.le.68) then
+            call seawifs(iwave-60)
+          else if (iwave.gt.68 .and. iwave.le.72) then
+            call aatsr(iwave-68)
+          else if (iwave.gt.72 .and. iwave.le.87) then
+            call meris(iwave-72)
+          else if (iwave.gt.87 .and. iwave.le.117) then
+            call gli(iwave-87)
+          else if (iwave.gt.117 .and. iwave.le.126) then
+            call ali(iwave-117)
+          else if (iwave.gt.126 .and. iwave.le.136) then 
+            call aster(iwave-126)
+          else if (iwave.gt.136 .and. iwave.le.142) then
+            call etm(iwave-136)
+          else if (iwave.gt.142 .and. iwave.le.144) then 
+            call hypblue(iwave-142)
+          else if (iwave.gt.144 .and. iwave.le.148) then
+            call vgt(iwave-144)
+          else if (iwave.gt.148 .and. iwave.le.164) then
+            call viirs(iwave-148)
+          else if (iwave.gt.164 .and. iwave.le.173) then 
+            call ldcm(iwave-164)
+          else if (iwave.gt.173 .and. iwave.le.185) then 
+            call modis1km(iwave-173)
+          else if (iwave.gt.185 .and. iwave.le.196) then 
+            call cavis(iwave-185)
+          else if (iwave.gt.196 .and. iwave.le.199) then 
+            call dmc(iwave-196)
+          else
+            write(*,'(a)') 'Error, this iwave number is not defined yet'
+            write(*,'(a, i3)') 'iwave band code = ', iwave
+            error stop 
+          end if 
+          iinf=(wlinf-.25)/0.0025+1.5
+          isup=(wlsup-.25)/0.0025+1.5
+          if (iprtspr.eq.1) then
+            do i=iinf,isup
+                write(6,*) "spres ",(i-1)*0.0025+0.25,s(i)
+            enddo
+          endif
+      end if
 
-   18 goto (110,
-     s      111,
-     s      112,112,
-     s      114,114,114,114,114,114,114,114,114,114,114,114,
-     s      118,118,118,118,118,118,118,118,
-     s      121,121,121,121,121,121,
-     s      127,127,127,127,
-     s      128,128,128,128,128,128,128,
-     s      129,129,129,129,129,129,129,
-     s      130,130,130,130,
-     s      131,131,131,131,131,131,131,131,
-     s      113,113,113,113,113,113,113,113,
-     s      150,150,150,150,
-     s      151,151,151,151,151,151,151,151,
-     s      151,151,151,151,151,151,151,
-     s      152,152,152,152,152,152,152,152,152,152,
-     s      152,152,152,152,152,152,152,152,152,152,
-     s      152,152,152,152,152,152,152,152,152,152,
-     s      153,153,153,153,153,153,153,153,153,
-     s      154,154,154,154,154,154,154,154,154,154,
-     s      155,155,155,155,155,155,
-     s      156,156,
-     s      157,157,157,157,
-     s      159,159,159,159,159,159,159,159,159,159,
-     s      159,159,159,159,159,159,
-     s      161,161,161,161,161,161,161,161,161,
-     s      162,162,162,162,162,162,162,162,162,162,162,162,
-     s      163,163,163,163,163,163,163,163,163,163,163,
-     s      164,164,164),iwave
-  110 read(iread,*) wlinf,wlsup
-      iinf=(wlinf-.25)/0.0025+1.5
-      isup=(wlsup-.25)/0.0025+1.5
-      do ik=iinf,isup
-       s(ik)=0.
-      end do
-      read(iread,*) (s(i),i=iinf,isup)
-      goto 20
-  111 call meteo
-      go to 19
-  112 call goes(iwave-2)
-      go to 19
-  114 call avhrr(iwave-4)
-      go to 19
-  118 call hrv(iwave-16)
-      go to 19
-  121 call tm(iwave-24)
-      go to 19
-  127 call mss(iwave-30)
-      goto 19
-  128 call mas(iwave-34)
-      goto 19
-  129 call modis(iwave-41)
-      goto 19
-  130 call avhrr(iwave-48)
-      goto 19
-  131 call polder(iwave-52)
-      goto 19
-  113 call seawifs(iwave-60)
-      goto 19
-  150 call aatsr(iwave-68)
-      goto 19
-  151 call meris(iwave-72)
-      goto 19
-  152 call gli(iwave-87)
-      goto 19
-  153 call ali(iwave-117)
-      goto 19 
-  154 call aster(iwave-126)
-      goto 19
-  155 call etm(iwave-136)
-      goto 19
-  156 call hypblue(iwave-142)
-      goto 19
-  157 call vgt(iwave-144)
-      goto 19
-  159 call viirs(iwave-148)
-      goto 19 
-  161 call ldcm(iwave-164)
-      goto 19 
-  162 call modis1km(iwave-173)
-      goto 19 
-  163 call cavis(iwave-185)
-      goto 19 
-  164 call dmc(iwave-196)
-      goto 19 
-
-   19 iinf=(wlinf-.25)/0.0025+1.5
-      isup=(wlsup-.25)/0.0025+1.5
-      if (iprtspr.eq.1) then
-         do i=iinf,isup
-            write(6,*) "spres ",(i-1)*0.0025+0.25,s(i)
-         enddo
-      endif
-
-   20 continue
- 
 C***********************************************************************
 C LOOK UP TABLE INITIALIZATION
 C***********************************************************************
