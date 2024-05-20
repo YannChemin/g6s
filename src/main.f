@@ -75,6 +75,14 @@
         ! Define visibility and/or AOD at 550nm
         real      :: visibility, aodat550nm
 
+        ! Define target pressure or altitude (DEM/DSM)
+        real      :: targetpressure, targetaltitude
+
+        ! Define sensor altitude (-1000km for satellite, -100-0km for aircraft))
+        real      :: sensoraltitude
+        ! Define aircraft sensor to target information (sensoraltitude=-100-0km)
+        real      :: s2twatervapourcontent, s2tozonecontent, s2taod550nm
+
         ! The OUTPUT pixel reflectance
         real      :: outputpixelreflectance
 
@@ -157,6 +165,10 @@
      s                           filenameaerosol,
      s                           outaerosolmie, outfilenameaerosolmie,
      s                           visibility, aodat550nm,
+     s                        targetpressure, targetaltitude,
+     s                           sensoraltitude,
+     s                           s2twatervapourcontent, s2tozonecontent,
+     s                           s2taod550nm,
      s                        outputpixelreflectance)
                    array(i,j) = outputpixelreflectance 
                 end do

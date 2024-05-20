@@ -14,6 +14,10 @@
      s                    filenameaerosol,
      s                    outaerosolmie, outfilenameaerosolmie,
      s                    visibility, aodat550nm,
+     s                 targetpressure, targetaltitude,
+     s                    sensoraltitude,
+     s                    s2twatervapourcontent, s2tozonecontent,
+     s                    s2taod550nm,
      s                 outputpixelreflectance) 
         
         ! The INPUT pixel reflectance
@@ -46,6 +50,14 @@
 
         ! Define visibility and/or AOD at 550nm
         real, intent(in)    :: visibility, aodat550nm
+
+        ! Define target pressure or altitude (DEM/DSM)
+        real, intent(in)    :: targetpressure, targetaltitude
+
+        ! Define sensor altitude (-1000km for satellite, -100-0km for aircraft))
+        real, intent(in)    :: sensoraltitude
+        ! Define aircraft sensor to target information (sensoraltitude=-100-0km)
+        real, intent(in)    :: s2twatervapourcontent, s2tozonecontent, s2taod550nm
 
         ! Define output of subroutine
         real, intent(out)   :: outputpixelreflectance 
@@ -1227,21 +1239,21 @@ c                                                                      c
 c**********************************************************************c
  
       !771  read(iread,*) xps
-      if (targetpressure.ne.0) .and. (targetaltitude.ne.0) then
+      if ((targetpressure.ne.0) .and. (targetaltitude.ne.0)) then
         ! pressure or altitude, one should always be = 0
         write(*,'(a)') 'Error, pressure > 0 and altitude > 0, one should be = 0'
         write(*,'(a, i3)') 'target pressure = ', targetpressure 
         write(*,'(a, i3)') 'target altitude = ', targetaltitude
         error stop
       end if
-      if (targetpressure.gt.0) .and. (targetaltitude.eq.0) then
+      if ((targetpressure.gt.0) .and. (targetaltitude.eq.0)) then
         xps = targetpressure
       end if
-      if (targetpressure.eq.0) .and. (targetaltitude.gt.0) then
+      if ((targetpressure.eq.0) .and. (targetaltitude.gt.0)) then
         ! Convert altitude to negative for the function to know what it is
         xps = -1.0 * targetaltitude
       end if
-      if (targetpressure.eq.0) .and. (targetaltitude.lt.0) then
+      if ((targetpressure.eq.0) .and. (targetaltitude.lt.0)) then
         ! Input altitude is negative, pass through
         xps = targetaltitude
       end if
@@ -1277,59 +1289,64 @@ C    profile according to the values at ground level. Taerp will be    c
 c    computed according to a 2km exponential profile for aerosol.      c
 c**********************************************************************c
 
-        read(iread,*) xpp
+      !read(iread,*) xpp
+      xpp = sensoraltitude
 
-        xpp=-xpp
-        if (xpp.le.0.0) then
-c          ground measurement option        
+      xpp=-xpp
+      if (xpp.le.0.0) then
+           ! ground measurement option        
            palt=0.
            pps=p(1)
            idatmp=0
            taer55p=0.
            puw=0.
            puoz=0.
-           else
-           if (xpp.ge.100.) then
-c	       satellite case of equivalent	   
-              palt=1000.
-              pps=0.
-              taer55p=taer55
-              ftray=1.
-              idatmp=4
-              else
-c	      "real" plane case	      
-              read(iread,*) puw,puo3
-              if (puw.lt.0.) then
-                 call presplane(puw,puo3,xpp,ftray)
-                 idatmp=2
-                 if (idatm.eq.8) then
+      else
+         if (xpp.ge.100.) then
+            ! satellite case of equivalent	   
+            palt=1000.
+            pps=0.
+            taer55p=taer55
+            ftray=1.
+            idatmp=4
+         else
+            !"real" plane case	      
+            !read(iread,*) puw,puo3
+            puw = s2twatervapourcontent
+            puo3 = s2tozonecontent
+            ! In case water vapour content is < 0, compute
+            if (puw.lt.0.) then
+                call presplane(puw,puo3,xpp,ftray)
+                idatmp=2
+                if (idatm.eq.8) then
                     puwus=puw
                     puo3us=puo3
                     puw=puw*uw/uwus
                     puo3=puo3*uo3/uo3us
                     idatmp=8
-                 endif
-              else
-                 call presplane(puwus,puo3us,xpp,ftray)
-                 idatmp=8
-              endif
-              if(ier) stop
-              palt=zpl(34)-z(1)
-              pps=ppl(34)
-              read(iread,*) taer55p
-            if ((taer55p.lt.0.).or.((taer55-taer55p).lt.accu2)) then
-c a scale heigh of 2km is assumed in case no value is given for taer55p
-               taer55p=taer55*(1.-exp(-palt/2.))
+                endif
             else
-C compute effective scale heigh
-               sham=exp(-palt/4.)
-               sha=1.-(taer55p/taer55)
-               if (sha.ge.sham) then
-                  taer55p=taer55*(1.-exp(-palt/4.))
-               else
-                  sha=-palt/log(sha)
-                  taer55p=taer55*(1.-exp(-palt/sha))
-               endif
+                call presplane(puwus,puo3us,xpp,ftray)
+                idatmp=8
+            endif
+            !if(ier) stop
+            palt=zpl(34)-z(1)
+            pps=ppl(34)
+            !read(iread,*) taer55p
+            taer55p = s2taod550nm
+            if ((taer55p.lt.0.).or.((taer55-taer55p).lt.accu2)) then
+                !a scale heigh of 2km is assumed in case no value is given for taer55p
+                taer55p=taer55*(1.-exp(-palt/2.))
+            else
+                !compute effective scale heigh
+                sham=exp(-palt/4.)
+                sha=1.-(taer55p/taer55)
+                if (sha.ge.sham) then
+                    taer55p=taer55*(1.-exp(-palt/4.))
+                else
+                    sha=-palt/log(sha)
+                    taer55p=taer55*(1.-exp(-palt/sha))
+                endif
             endif
          endif
       endif
