@@ -291,3 +291,230 @@ targetaltitude is the DEM/DSM value
 | 198    | DMC band 2               |[0.6100-0.7100]|Integer<br> ||
 | 199    | DMC band 3               |[0.7525-0.9275]|Integer<br> ||
 
+### inhomo: ground reflectance (type)
+
+
+c*********************************************************************c
+c     inhomo        ground reflectance (type)                          c
+c                   ------------------                                 c
+c                                                                      c
+c  you consider an homogeneous surface:                                c
+c     enter - inhomo=0                                                 c
+c                you may consider directional surface  effects         c
+c                  idirec=0 (no directional effect)                    c
+c                          you have to specify the surface reflectance:c
+c                          igroun  (see note1) which is uniform and    c
+c                          lambertian                                  c
+c                  idirec=1 ( directional effect)                      c
+c                          you have to specify the brdf of the surface c
+c                           for the actual solar illumination you  are c
+c                           considering as well as the  for a sun  c
+c                           which would be at an angle thetav, in      c
+c                           addition you have to give the surface      c
+c                           albedo (spherical albedo). you can also    c
+c                           select one of the selected model from the  c
+c                           ibrdf value (see note2). 3 reflectances    c
+c                           are computed, robar,robarp and robard      c
+c                                                                      c
+c  you consider a non uniform surface, the surface is considered as a  c
+c            circular target with a reflectance roc and of radius r    c
+c            (expressed in km) within an environment of reflectance    c
+c            roe                                                       c
+c     enter - inhomo=1, then                                           c
+c             igrou1,igrou2,rad                                        c
+c                  - the target reflectance :igrou1  (see note1)       c
+c                  - the envir. reflectance :igrou2  (see note1)       c
+c                  - the target radius in km                           c
+c                                                                      c
+c                                                                      c
+c                            ****tree****                              c
+c                                                                      c
+c                               inhomo                                 c
+c                             /          \                             c
+c                            /            \                            c
+c                           /              \                           c
+c                          /                \                          c
+c                 ------- 0 -------       -----1 -----                 c
+c                        /               /   \       \                 c
+c                    idirec             /     \       \                c
+c                    /  \              /       \       \               c
+c                   /    \            /         \       \              c
+c                  /      \       igrou1       igrou2    rad           c
+c                 0        1        roc          roe     f(r)          c
+c                /          \                                          c
+c               /            \                                         c
+c           igroun          ibrdf                                      c
+c        (roc = roe)        (roc)                                      c
+c                           (robar)                                    c
+c                           (robarp)                                   c
+c                           (robard)                                   c
+c                                                                      c
+c                   ground reflectance (spectral variation)            c
+c                   ---------------------------------------            c
+c note1: values of the reflectance selected by igroun,igrou1 or igrou2 c
+c        may correspond to the following cases,                        c
+c         0  constant value of ro (or roc,or roe) whatever the wavelen c
+c            gth. you enter this constant value of ro (or roc or roe). c
+c        -1  you have to enter the value of ro (or roc,or roe) by step c
+c            of 0.0025 micron from wlinf to wlsup (if you have used thec
+c            satellite bands,see implicit values for these limits).    c
+c         1  mean spectral value of green vegetation                   c
+c         2  mean spectral value of clear water                        c
+c         3  mean spectral value of sand                               c
+c         4  mean spectral value of lake water                         c
+c                                                                      c
+c                       ground reflectance (brdf)                      c
+c                       -------------------------                      c
+c note2: values of the directional reflectance is assumed spectrally   c
+c        independent, so you have to specify, the brdf at the          c
+c        wavelength for monochromatic condition of the mean value      c
+c        over the spectral band                                        c
+c         0  you have to enter the value of ro for sun at thetas by    c
+c            step of 10 degrees for zenith view  angles (from 0 to 80  c
+c            and the value for 85) and by step of 30 degrees for       c
+c            azimuth view angles from 0 to 360 degrees, you have to do c
+c            same for a sun which would be at thetav. in addition, the c
+c            spherical albedo of the surface has to be specified ,as   c
+C            well as the observed reflectance in the selected geometry c
+c           rodir(sun zenith,view zenith, relative azimuth).	       c
+c		 						       c
+c        you also may select one of the following models               c
+c         1  hapke model                                               c
+c             the parameters are: om,af,s0,h                           c
+c                    om= albedo                                        c
+c                    af=assymetry parameter for the phase function     c
+c                    s0=amplitude of hot spot                          c
+c                    h=width of the hot spot                           c
+c                                                                      c
+c         2  verstraete et al. model                                   c
+c             the parameters are:                                      c
+c                there is three lines of parameters:                   c
+c                              line 1 (choice of options)              c
+c                              line 2 (structural parameters)          c
+c                              line 3 (optical parameters)             c
+c                line 1:  opt3 opt4 opt5                               c
+c                    opt1=1 parametrized model (see verstraete et al., c
+c                           JGR, 95, 11755-11765, 1990)                c
+c                    opt2=1 reflectance factor (see pinty et al., JGR, c
+c                           95, 11767-11775, 1990)                     c
+c                    opt3=0 for given values of kappa (see struc below)c
+c                         1 for goudriaan's parameterization of kappa  c
+c                         2 for dickinson et al's correction to        c
+c                           goudriaan's parameterization of kappa (see c
+c                           dickinson et al., agricultural and forest  c
+c                           meteorology, 52, 109-131, 1990)            c
+c                       ---see the manual for complete references----  c
+c                    opt4=0 for isotropic phase function               c
+c                         1 for heyney and greensteins' phase function c
+c                         2 for legendre polynomial phase function     c 
+c                    opt5=0 for single scattering only                 c
+c                         1 for dickinson et al. parameterization of   c
+c                           multiple scattering                        c
+c                line 2:  str1 str2 str3 str4                          c
+c                    str1='leaf area density', in m2 m-3               c
+c                    str2=radius of the sun flecks on the scatterer (m)c
+c                    str3=leaf orientation parameter:                  c
+c                         if opt3=0 then str3=kappa1                   c
+c                         if opt3=1 or 2  then str3=chil               c
+c                    str4=leaf orientation parameter (continued):      c
+c                         if opt3=0 then str4=kappa2                   c
+c                         if opt3=1 or 2 then str4 is not used         c
+c                line 3:  optics1 optics2 optics3                      c
+c                    optics1=single scattering albedo, n/d value       c
+c                            between 0.0 and 1.0                       c
+c                    optics2= phase function parameter:                c
+c                         if opt4=0 then this input is not used        c
+c                         if opt4=1 then asymmetry factor, n/d value   c
+c                                   between -1.0and 1.0                c
+c                         if opt4=2 then first coefficient of legendre c
+c                                   polynomial                         c
+c                    optics3=second coefficient of legendre polynomial c
+c                            (if opt4=2)                               c
+c                                                                      c
+c         3  Roujean et al. model                                      c
+c             the parameters are: k0,k1,k2                             c
+c                 k0=albedo.                                           c
+c                 k1=geometric parameter for hot spot effect           c
+c                 k2=geometric parameter for hot spot effect           c
+c                                                                      c
+c         4  walthall et al. model                                     c
+c             the parameters are: a,ap,b,c                             c    
+c                 a=term in square ts*tv                               c
+c                 ap=term in square ts*ts+tv*tv                        c
+c                 b=term in ts*tv*cos(phi) (limacon de pascal)         c
+c                 c=albedo                                             c
+c                                                                      c
+c         5  minnaert model                                            c
+c             the parameters are: par1,par2                            c
+c                                                                      c
+c         6  Ocean                                                     c
+c             the parameter are: pws,phi_wind,xsal,pcl                 c
+c                 pws=wind speed (in m/s)                              c
+c                 phi_wind=azim. of the wind (in degres)               c
+c                 xsal=salinity (in ppt) xsal=34.3ppt if xsal<0        c
+c                 pcl=pigment concentration (in mg/m3)                 c
+c                                                                      c
+c         7  Iaquinta and Pinty model                                  c
+c             the parameters are:                                      c
+c                there is 3 lines of parameters:                       c
+c                          line 1: choice of option (pild,pihs)        c
+c                          line 2: structural parameters (pxLt,pc)     c
+c                          line 3: optical parameters (pRl,pTl,pRs)    c
+c                Line 1: pild,pihs                                     c
+c                    pild=1  planophile leaf distribution              c 
+c                    pild=2  erectophile leaf distribution             c 
+c                    pild=3  plagiophile leaf distribution             c 
+c                    pild=4  extremophile leaf distribution            c 
+c                    pild=5  uniform leaf distribution                 c 
+c                                                                      c 
+c                    pihs=0  no hot spot                               c 
+c                    pihs=1  hot spot                                  c 
+c                Line 2: pxLt,pc                                       c
+c                    pxLt=Leaf area index [1.,15.]                     c 
+c                    pc=Hot spot parameter: 2*r*Lambda [0.,2.]         c
+c                Line 3: pRl,pTl,pRs                                   c
+c                    pRl=Leaf reflectance  [0.,0.99]                   c 
+c                    pTl=Leaf transmitance [0.,0.99]                   c 
+c                    pRs=Soil albedo       [0.,0.99]                   c 
+c                         NB: pRl+PTl <0.99                            c 
+c                                                                      c
+c         8  Rahman et al. model                                       c
+c             the parameters are: rho0,af,xk                           c
+c                 rho0=Intensity of the reflectance of the surface     c
+c                      cover, N/D value greater or equal to 0          c
+c                 af=Asymmetry factor, N/D value between -1.0 and 1.0  c
+c                 xk=Structural parameter of the medium                c
+c         9   Kuusk's multispectral CR model                           c
+c             Reference:                                               c
+c             Kuusk A. A multispectral canopy reflectance model.       c
+c             Remote Sens. Environ., 1994, 50:75-82                    c
+c                                                                      c
+c                                                                      c
+c             the parameters are:                                      c
+c                                                                      c
+c     line 1: structural parameters (ul,eps,thm,sl)                    c
+c     line 2: optical parameters (cAB,cW,N,cn,s1)                      c
+c                                                                      c
+c             ul=LAI     [0.1...10]                                    c
+c             eps,thm - LAD parameters                                 c
+c             eps [0.0..0.9] thm [0.0..90.0]                           c
+c             sl      - relative leaf size  [0.01..1.0]                c
+c             cAB     - chlorophyll content, ug/cm^2    [30]           c
+c             cW      - leaf water equivalent thickness  [0.01..0.03]  c
+c             N       - the effective number of elementary layers      c
+c                       inside a leaf   [1.225]                        c
+c             cn      - the ratio of refractive indices of the leaf    c
+c                       surface wax and internal material  [1.0]       c
+c             s1      - the weight of the 1st Price function for the   c
+c                       soil reflectance     [0.1..0.8]                c
+c        10  MODIS operational BDRF                                    c
+c             the parameters are: p1,p2,p3                             c
+c                 p1 weight for lambertian kernel                      c
+c                 p2 weight for Ross Thick kernel                      c
+c                 p3 weight for Li Sparse  kernel                      c
+c        11  RossLiMaigan  BDRF  model                                 c
+c             the parameters are: p1,p2,p3                             c
+c                 p1 weight for lambertian kernel                      c
+c                 p2 weight for Ross Thick with Hot Spot kernel        c
+c                 p3 weight for Li Sparse  kernel                      c
+c**********************************************************************c
