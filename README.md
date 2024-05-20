@@ -58,11 +58,19 @@ iaerp: print output of iaer=[8, 9, 10, 11]
 | 0     | results will not be saved |            |Integer    |      |
 | 1     | results will be saved |File input (auto extension .mie)|Character|      |
 
-AODat550nm: aerosol optical depth at 550nm, only for iaer = [1, 2, 3, 5, 6, 7], iaer_prof=0
+taer55: aerosol optical depth at 550nm, only for iaer = [1, 2, 3, 5, 6, 7], iaer_prof=0
 ---------------------------------------------------------------------
-| AODat550nm | Description           | Parameters     | Data Type | Unit |
-|:-----------|:---------------------:|:---------------|:----------|:-----|
-| V          | Direct estimate of the Visibility  |1. Visibility<br>2. aodat550nm not used<br> | Float<br>Float | Km<br>Km<br>|
-| taer55     | Direct estimate of the AOD at 550nm |1. Visibility=0<br>2. aodat550nm<br> | Float<br>Float | Km<br>Km<br>|
-| V          | Not used |1. Visibility=-1<br>2. aodat550nm not used.<br>|Float<br>Float<br>| Km<br>Km<br>|
+| taer55 | Description           | Parameters     | Data Type | Unit |
+|:-------|:---------------------:|:---------------|:----------|:-----|
+| V      | Direct estimate of the Visibility  |1. Visibility<br>2. aodat550nm not used<br> | Float<br>Float | Km<br>Km<br>|
+| taer55 | Direct estimate of the AOD at 550nm |1. Visibility=0<br>2. aodat550nm<br> | Float<br>Float | Km<br>Km<br>|
+| V      | Not used |1. Visibility=-1<br>2. aodat550nm not used.<br>|Float<br>Float<br>| Km<br>Km<br>|
+
+xps: defining target pressure or target height (only one should be != 0)
+------------------------------------------------------------------------
+| xps   | Description           | Parameters     | Data Type | Unit   |
+|:------|:---------------------:|:---------------|:----------|:-------|
+| >= 0  | Direct estimate of the pressure |pressure|Float    |millibar|
+| < 0   | Direct estimate of the altitude |altitude|Float    |Km      | 
+
 

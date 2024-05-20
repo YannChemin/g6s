@@ -1226,13 +1226,31 @@ c                                                                      c
 c                                                                      c
 c**********************************************************************c
  
- 771   read(iread,*) xps
+      !771  read(iread,*) xps
+      if (pressure.ne.0) .and. (altitude.ne.0) then
+        ! pressure or altitude, one should always be = 0
+        write(*,'(a)') 'Error, pressure > 0 and altitude > 0, one should be = 0'
+        write(*,'(a, i3)') 'pressure = ', pressure 
+        write(*,'(a, i3)') 'altitude = ', altitude
+        error stop
+      end if
+      if (pressure.gt.0) .and. (altitude.eq.0) then
+        xps = pressure
+      end if
+      if (pressure.eq.0) .and. (altitude.gt.0) then
+        ! Convert altitude to negative for the function to know what it is
+        xps = -1.0 * altitude
+      end if
+      if (pressure.eq.0) .and. (altitude.lt.0) then
+        ! Input altitude is negative, pass through
+        xps = altitude
+      end if
 
-         if (idatm.ne.8) then
+      if (idatm.ne.8) then
          call pressure(uw,uo3,xps)
-        else
+      else
          call pressure(uwus,uo3us,xps)
-        endif
+      endif
  
 c**********************************************************************c
 c                                                                      c
