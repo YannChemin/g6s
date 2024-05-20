@@ -86,87 +86,87 @@ targetaltitude is the DEM/DSM value
 
 ### iwave: input of the spectral conditions
 
-| iwave  | Description           | Parameters     | Data Type | Unit   |
-|:-------|:---------------------:|:---------------|:----------|:-------|
-| -2     | Direct definition     |<br>1. wavelength inf.<br>2. wavelength sup.<br> step by step output|Integer<br>Float<br>Float<br>|<br>micrometer<br>micrometer<br>|
-| -1     | Direct definition     |<br>1. wavelength<br>|Integer<br>Float<br>|<br>micrometer<br>|
-|  0     | Direct definition     |<br>1. wavelength inf.<br>2. wavelength sup.<br>|Float<br>Float<br>|micrometer<br>micrometer<br>|
-|  1     | Direct definition     |<br>1. wavelength inf.<br>2. wavelength sup.<br>3. Filter function s(lambda) by step of 0.0025 micrometer|Float<br>Float<br>repeat function elements<br>|micrometer<br>micrometer<br>function<br>|
-|  2     | Meteosat VIS band     |[0.350-1.110]|Integer<br> |<br>|
-|  3     | GOES East VIS band    |[0.490-0.900]|Integer<br> |<br>|
-|  4     | GOES West VIS band    |[0.490-0.900]|Integer<br> |<br>|
-|  5     | NOAA AVHRR 6 band 1   |[0.550-0.750]|Integer<br> |<br>|
-|  6     | NOAA AVHRR 6 band 2   |[0.690-1.120]|Integer<br> |<br>|
-|  7     | NOAA AVHRR 7 band 1   |[0.500-0.800]|Integer<br> |<br>|
-|  8     | NOAA AVHRR 7 band 2   |[0.640-0.800]|Integer<br> |<br>|
-|  9     | NOAA AVHRR 8 band 1   |[0.540-1.010]|Integer<br> |<br>|
-| 10     | NOAA AVHRR 8 band 2   |[0.680-1.120]|Integer<br> |<br>|
-| 11     | NOAA AVHRR 9 band 1   |[0.530-0.810]|Integer<br> |<br>|
-| 12     | NOAA AVHRR 9 band 2   |[0.680-1.170]|Integer<br> |<br>|
-| 13     | NOAA AVHRR 10 band 1  |[0.530-0.780]|Integer<br> |<br>|
-| 14     | NOAA AVHRR 10 band 2  |[0.600-1.190]|Integer<br> |<br>|
-| 15     | NOAA AVHRR 11 band 1  |[0.540-0.820]|Integer<br> |<br>|
-| 16     | NOAA AVHRR 11 band 2  |[0.600-1.120]|Integer<br> |<br>|
-| 17     | SPOT HRV 1 band 1     |[0.470-0.650]|Integer<br> |<br>|
-| 18     | SPOT HRV 1 band 2     |[0.600-0.720]|Integer<br> |<br>|
-| 19     | SPOT HRV 1 band 3     |[0.730-0.930]|Integer<br> |<br>|
-| 20     | SPOT HRV 1 band pan   |[0.470-0.790]|Integer<br> |<br>|
-| 21     | SPOT HRV 2 band 1     |[0.470-0.650]|Integer<br> |<br>|
-| 22     | SPOT HRV 2 band 2     |[0.590-0.730]|Integer<br> |<br>|
-| 23     | SPOT HRV 2 band 3     |[0.740-0.940]|Integer<br> |<br>|
-| 24     | SPOT HRV 2 band pan   |[0.470-0.790]|Integer<br> |<br>|
-| 25     | LANDSAT5 TM band 1    |[0.430-0.560]|Integer<br> |<br>|
-| 26     | LANDSAT5 TM band 2    |[0.500-0.650]|Integer<br> |<br>|
-| 27     | LANDSAT5 TM band 3    |[0.580-0.740]|Integer<br> |<br>|
-| 28     | LANDSAT5 TM band 4    |[0.730-0.950]|Integer<br> |<br>|
-| 29     | LANDSAT5 TM band 5    |[1.5025-1.890]|Integer<br> |<br>|
-| 30     | LANDSAT5 TM band 7    |[1.950-2.410]|Integer<br> |<br>|
-| 31     | LANDSAT MSS band 1    |[0.475-0.640]|Integer<br> |<br>|
-| 32     | LANDSAT MSS band 2    |[0.580-0.750]|Integer<br> |<br>|
-| 33     | LANDSAT MSS band 3    |[0.655-0.855]|Integer<br> |<br>|
-| 34     | LANDSAT MSS band 4    |[0.785-1.100]|Integer<br> |<br>|
-| 35     | MAS ER2 band 1        |[0.5025-0.5875]|Integer<br> |<br>|
-| 36     | MAS ER2 band 2        |[0.6075-0.7000]|Integer<br> |<br>|
-| 37     | MAS ER2 band 3        |[0.8300-0.9125]|Integer<br> |<br>|
-| 38     | MAS ER2 band 4        |[0.9000-0.9975]|Integer<br> |<br>|
-| 39     | MAS ER2 band 5        |[1.8200-1.9575]|Integer<br> |<br>|
-| 40     | MAS ER2 band 6        |[2.0950-2.1925]|Integer<br> |<br>|
-| 41     | MAS ER2 band 7        |[3.5800-3.8700]|Integer<br> |<br>|
-| 42     | MODIS band 1          |[0.6100-0.6850]|Integer<br> |<br>|
-| 43     | MODIS band 2          |[0.8200-0.9025]|Integer<br> |<br>|
-| 44     | MODIS band 3          |[0.4500-0.4825]|Integer<br> |<br>|
-| 45     | MODIS band 4          |[0.5400-0.5700]|Integer<br> |<br>|
-| 46     | MODIS band 5          |[1.2150-1.2700]|Integer<br> |<br>|
-| 47     | MODIS band 6          |[1.6000-1.6650]|Integer<br> |<br>|
-| 48     | MODIS band 7          |[2.0575-2.1825]|Integer<br> |<br>|
-| 49     | NOAA AVHRR 12 band 1  |[0.500-1.000]|Integer<br> |<br>|
-| 50     | NOAA AVHRR 12 band 2  |[0.650-1.120]|Integer<br> |<br>|
-| 51     | NOAA AVHRR 14 band 1  |[0.500-1.110]|Integer<br> |<br>|
-| 52     | NOAA AVHRR 14 band 2  |[0.680-1.100]|Integer<br> |<br>|
-| 53     | POLDER band 1         |[0.4125-0.4775]|Integer<br> |<br>|
+| iwave  | Description              | Parameters     | Data Type | Unit   |
+|:-------|:------------------------:|:---------------|:----------|:-------|
+| -2     | Direct definition        |<br>1. wavelength inf.<br>2. wavelength sup.<br> step by step output|Integer<br>Float<br>Float<br>|<br>micrometer<br>micrometer<br>|
+| -1     | Direct definition        |<br>1. wavelength<br>|Integer<br>Float<br>|<br>micrometer<br>|
+|  0     | Direct definition        |<br>1. wavelength inf.<br>2. wavelength sup.<br>|Float<br>Float<br>|micrometer<br>micrometer<br>|
+|  1     | Direct definition        |<br>1. wavelength inf.<br>2. wavelength sup.<br>3. Filter function s(lambda) by step of 0.0025 micrometer|Float<br>Float<br>repeat function elements<br>|micrometer<br>micrometer<br>function<br>|
+|  2     | Meteosat VIS band        |[0.350-1.110]|Integer<br> |<br>|
+|  3     | GOES East VIS band       |[0.490-0.900]|Integer<br> |<br>|
+|  4     | GOES West VIS band       |[0.490-0.900]|Integer<br> |<br>|
+|  5     | NOAA AVHRR 6 band 1      |[0.550-0.750]|Integer<br> |<br>|
+|  6     | NOAA AVHRR 6 band 2      |[0.690-1.120]|Integer<br> |<br>|
+|  7     | NOAA AVHRR 7 band 1      |[0.500-0.800]|Integer<br> |<br>|
+|  8     | NOAA AVHRR 7 band 2      |[0.640-0.800]|Integer<br> |<br>|
+|  9     | NOAA AVHRR 8 band 1      |[0.540-1.010]|Integer<br> |<br>|
+| 10     | NOAA AVHRR 8 band 2      |[0.680-1.120]|Integer<br> |<br>|
+| 11     | NOAA AVHRR 9 band 1      |[0.530-0.810]|Integer<br> |<br>|
+| 12     | NOAA AVHRR 9 band 2      |[0.680-1.170]|Integer<br> |<br>|
+| 13     | NOAA AVHRR 10 band 1     |[0.530-0.780]|Integer<br> |<br>|
+| 14     | NOAA AVHRR 10 band 2     |[0.600-1.190]|Integer<br> |<br>|
+| 15     | NOAA AVHRR 11 band 1     |[0.540-0.820]|Integer<br> |<br>|
+| 16     | NOAA AVHRR 11 band 2     |[0.600-1.120]|Integer<br> |<br>|
+| 17     | SPOT HRV 1 band 1        |[0.470-0.650]|Integer<br> |<br>|
+| 18     | SPOT HRV 1 band 2        |[0.600-0.720]|Integer<br> |<br>|
+| 19     | SPOT HRV 1 band 3        |[0.730-0.930]|Integer<br> |<br>|
+| 20     | SPOT HRV 1 band pan      |[0.470-0.790]|Integer<br> |<br>|
+| 21     | SPOT HRV 2 band 1        |[0.470-0.650]|Integer<br> |<br>|
+| 22     | SPOT HRV 2 band 2        |[0.590-0.730]|Integer<br> |<br>|
+| 23     | SPOT HRV 2 band 3        |[0.740-0.940]|Integer<br> |<br>|
+| 24     | SPOT HRV 2 band pan      |[0.470-0.790]|Integer<br> |<br>|
+| 25     | LANDSAT5 TM band 1       |[0.430-0.560]|Integer<br> |<br>|
+| 26     | LANDSAT5 TM band 2       |[0.500-0.650]|Integer<br> |<br>|
+| 27     | LANDSAT5 TM band 3       |[0.580-0.740]|Integer<br> |<br>|
+| 28     | LANDSAT5 TM band 4       |[0.730-0.950]|Integer<br> |<br>|
+| 29     | LANDSAT5 TM band 5       |[1.5025-1.890]|Integer<br> |<br>|
+| 30     | LANDSAT5 TM band 7       |[1.950-2.410]|Integer<br> |<br>|
+| 31     | LANDSAT MSS band 1       |[0.475-0.640]|Integer<br> |<br>|
+| 32     | LANDSAT MSS band 2       |[0.580-0.750]|Integer<br> |<br>|
+| 33     | LANDSAT MSS band 3       |[0.655-0.855]|Integer<br> |<br>|
+| 34     | LANDSAT MSS band 4       |[0.785-1.100]|Integer<br> |<br>|
+| 35     | MAS ER2 band 1           |[0.5025-0.5875]|Integer<br> |<br>|
+| 36     | MAS ER2 band 2           |[0.6075-0.7000]|Integer<br> |<br>|
+| 37     | MAS ER2 band 3           |[0.8300-0.9125]|Integer<br> |<br>|
+| 38     | MAS ER2 band 4           |[0.9000-0.9975]|Integer<br> |<br>|
+| 39     | MAS ER2 band 5           |[1.8200-1.9575]|Integer<br> |<br>|
+| 40     | MAS ER2 band 6           |[2.0950-2.1925]|Integer<br> |<br>|
+| 41     | MAS ER2 band 7           |[3.5800-3.8700]|Integer<br> |<br>|
+| 42     | MODIS band 1             |[0.6100-0.6850]|Integer<br> |<br>|
+| 43     | MODIS band 2             |[0.8200-0.9025]|Integer<br> |<br>|
+| 44     | MODIS band 3             |[0.4500-0.4825]|Integer<br> |<br>|
+| 45     | MODIS band 4             |[0.5400-0.5700]|Integer<br> |<br>|
+| 46     | MODIS band 5             |[1.2150-1.2700]|Integer<br> |<br>|
+| 47     | MODIS band 6             |[1.6000-1.6650]|Integer<br> |<br>|
+| 48     | MODIS band 7             |[2.0575-2.1825]|Integer<br> |<br>|
+| 49     | NOAA AVHRR 12 band 1     |[0.500-1.000]|Integer<br> |<br>|
+| 50     | NOAA AVHRR 12 band 2     |[0.650-1.120]|Integer<br> |<br>|
+| 51     | NOAA AVHRR 14 band 1     |[0.500-1.110]|Integer<br> |<br>|
+| 52     | NOAA AVHRR 14 band 2     |[0.680-1.100]|Integer<br> |<br>|
+| 53     | POLDER band 1            |[0.4125-0.4775]|Integer<br> |<br>|
 | 54     | POLDER band 2 (non polar)|[0.4100-0.5225]|Integer<br> |<br>|
 | 55     | POLDER band 3 (non polar)|[0.5325-0.5950]|Integer<br> |<br>|
-| 56     | POLDER band 4 P1      |[0.6300-0.7025]|Integer<br> |<br>|
+| 56     | POLDER band 4 P1         |[0.6300-0.7025]|Integer<br> |<br>|
 | 57     | POLDER band 5 (non polar)|[0.7450-0.7800]|Integer<br> |<br>|
 | 58     | POLDER band 6 (non polar)|[0.7000-0.8300]|Integer<br> |<br>|
-| 59     | POLDER band 7 P1      |[0.8100-0.9200]|Integer<br> |<br>|
+| 59     | POLDER band 7 P1         |[0.8100-0.9200]|Integer<br> |<br>|
 | 60     | POLDER band 8 (non polar)|[0.8650-0.9400]|Integer<br> |<br>|
-| 61     | SEAWIFS band 1        |[0.3825-0.70]|Integer<br> |<br>|
-| 62     | SEAWIFS band 2        |[0.3800-0.58]|Integer<br> |<br>|
-| 63     | SEAWIFS band 3        |[0.3800-1.02]|Integer<br> |<br>|
-| 64     | SEAWIFS band 4        |[0.3800-1.02]|Integer<br> |<br>|
-| 65     | SEAWIFS band 5        |[0.3825-1.15]|Integer<br> |<br>|
-| 66     | SEAWIFS band 6        |[0.3825-1.05]|Integer<br> |<br>|
-| 67     | SEAWIFS band 7        |[0.3800-1.15]|Integer<br> |<br>|
-| 68     | SEAWIFS band 8        |[0.3800-1.15]|Integer<br> |<br>|
-| 69     | AATSR band 1          |[0.5250-0.5925]|Integer<br> |<br>|
-| 70     | AATSR band 2          |[0.6275-0.6975]|Integer<br> |<br>|
-| 71     | AATSR band 3          |[0.8325-0.9025]|Integer<br> |<br>|
-| 72     | AATSR band 4          |[1.4475-1.7775]|Integer<br> |<br>|
-| 73     | MERIS band 01         |[0.412]|Integer<br> |<br>|
-| 74     | MERIS band 02         |[0.442]|Integer<br> |<br>|
-| 75     | MERIS band 03         |[0.489]|Integer<br> |<br>|
-| 76     | MERIS band 04         |[0.509]|Integer<br> |<br>|
+| 61     | SEAWIFS band 1           |[0.3825-0.70]|Integer<br> |<br>|
+| 62     | SEAWIFS band 2           |[0.3800-0.58]|Integer<br> |<br>|
+| 63     | SEAWIFS band 3           |[0.3800-1.02]|Integer<br> |<br>|
+| 64     | SEAWIFS band 4           |[0.3800-1.02]|Integer<br> |<br>|
+| 65     | SEAWIFS band 5           |[0.3825-1.15]|Integer<br> |<br>|
+| 66     | SEAWIFS band 6           |[0.3825-1.05]|Integer<br> |<br>|
+| 67     | SEAWIFS band 7           |[0.3800-1.15]|Integer<br> |<br>|
+| 68     | SEAWIFS band 8           |[0.3800-1.15]|Integer<br> |<br>|
+| 69     | AATSR band 1             |[0.5250-0.5925]|Integer<br> |<br>|
+| 70     | AATSR band 2             |[0.6275-0.6975]|Integer<br> |<br>|
+| 71     | AATSR band 3             |[0.8325-0.9025]|Integer<br> |<br>|
+| 72     | AATSR band 4             |[1.4475-1.7775]|Integer<br> |<br>|
+| 73     | MERIS band 01            |[0.412]|Integer<br> |<br>|
+| 74     | MERIS band 02            |[0.442]|Integer<br> |<br>|
+| 75     | MERIS band 03            |[0.489]|Integer<br> |<br>|
+| 76     | MERIS band 04            |[0.509]|Integer<br> |<br>|
 
 c        76  MERIS   band 04           ( 0.509)                        c
 c        77  MERIS   band 05           ( 0.559)                        c
