@@ -18,6 +18,8 @@
      s                    sensoraltitude,
      s                    s2twatervapourcontent, s2tozonecontent,
      s                    s2taod550nm,
+     s                 wavelength, wavelengthinf, wavelengthsup,
+     s                    filenameiwave,
      s                 outputpixelreflectance) 
         
         ! The INPUT pixel reflectance
@@ -58,6 +60,14 @@
         real, intent(in)    :: sensoraltitude
         ! Define aircraft sensor to target information (sensoraltitude=-100-0km)
         real, intent(in)    :: s2twatervapourcontent, s2tozonecontent, s2taod550nm
+        
+        ! Define wavelength central, inferior bound and superior bound
+        real, intent(in)    :: wavelength
+        real, intent(in)    :: wavelengthinf
+        real, intent(in)    :: wavelengthsup
+        ! Define filename for iwave operations (iwave = 1 needs it)
+        character(len=100), intent(in) :: filenameiwave
+        
 
         ! Define output of subroutine
         real, intent(out)   :: outputpixelreflectance 

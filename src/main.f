@@ -83,6 +83,13 @@
         ! Define aircraft sensor to target information (sensoraltitude=-100-0km)
         real      :: s2twatervapourcontent, s2tozonecontent, s2taod550nm
 
+        ! Define wavelength central, inferior bound and superior bound
+        real      :: wavelength
+        real      :: wavelengthinf
+        real      :: wavelengthsup
+        ! Define filename for iwave operations (iwave = 1 needs it)
+        character(len=100) :: filenameiwave
+
         ! The OUTPUT pixel reflectance
         real      :: outputpixelreflectance
 
@@ -169,6 +176,8 @@
      s                           sensoraltitude,
      s                           s2twatervapourcontent, s2tozonecontent,
      s                           s2taod550nm,
+     s                        wavelength, wavelengthinf, wavelengthsup,
+     s                           filenameiwave,
      s                        outputpixelreflectance)
                    array(i,j) = outputpixelreflectance 
                 end do
