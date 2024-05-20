@@ -68,9 +68,12 @@ taer55: aerosol optical depth at 550nm, only for iaer = [1, 2, 3, 5, 6, 7], iaer
 
 xps: defining target pressure or target height (only one should be != 0)
 ------------------------------------------------------------------------
+
+targetaltitude is the DEM/DSM value
+
 | xps   | Description           | Parameters     | Data Type | Unit   |
 |:------|:---------------------:|:---------------|:----------|:-------|
-| >= 0  | Direct estimate of the pressure |pressure|Float    |millibar|
-| < 0   | Direct estimate of the altitude |altitude|Float    |Km      | 
+| >= 0  | Direct estimate of the pressure |targetpressure|Float    |millibar|
+| < 0   | Direct estimate of the altitude |targetaltitude|Float    |Km      | 
 
 
