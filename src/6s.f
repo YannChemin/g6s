@@ -1723,25 +1723,25 @@ C Case standart LUT
      S    *sqrt(1.-lutmuv*lutmuv))
           filut(i,j)=acos(cfi)*180.0/pi
          enddo
-      enddo
-      i=mu
-         lutmuv=cos(avis*pi/180.)
-         luttv=acos(lutmuv)*180./pi
-         iscama=(180-abs(luttv-its))
-         iscami=(180-(luttv+its))
-         nbisca=int((iscama-iscami)/4)+1
-         nfilut(i)=nbisca
-         filut(i,1)=0.0
-         filut(i,nbisca)=180.0
-         scaa=iscama
-         do j=2,nfilut(i)-1
+       enddo
+       i=mu
+       lutmuv=cos(avis*pi/180.)
+       luttv=acos(lutmuv)*180./pi
+       iscama=(180-abs(luttv-its))
+       iscami=(180-(luttv+its))
+       nbisca=int((iscama-iscami)/4)+1
+       nfilut(i)=nbisca
+       filut(i,1)=0.0
+       filut(i,nbisca)=180.0
+       scaa=iscama
+       do j=2,nfilut(i)-1
           scaa=scaa-4.0
           cscaa=cos(scaa*pi/180.)
           cfi=-(cscaa+xmus*lutmuv)/(sqrt(1-xmus*xmus)
      S    *sqrt(1.-lutmuv*lutmuv))
           filut(i,j)=acos(cfi)*180.0/pi
-         enddo
-        endif
+       enddo
+      endif
 C END Case standart LUT      
 
 C Case LUT for APS
@@ -1751,24 +1751,24 @@ C Case LUT for APS
          nfilut(i)=nbisca
          filut(i,1)=(phi0-phiv)
          filut(i,nbisca)=(phi0-phiv)+180.0
-      enddo
-      i=mu
-         nbisca=1
-         nfilut(i)=nbisca
-         filut(i,1)=(phi0-phiv)
-         endif
+       enddo
+       i=mu
+       nbisca=1
+       nfilut(i)=nbisca
+       filut(i,1)=(phi0-phiv)
+      endif
 C END 	Case LUT for APS
 CCCC Check initialization  (debug)     
-       do i=1,mu
+      do i=1,mu
          lutmuv=rm(i)
          luttv=acos(lutmuv)*180./pi
-        do j=1,nfilut(i)
+         do j=1,nfilut(i)
             cscaa=-xmus*lutmuv-cos(filut(i,j)*pi/180.)*sqrt(1.-xmus*xmus)
      S      *sqrt(1.-lutmuv*lutmuv)
             scaa=acos(cscaa)*180./pi
             write(6,*) its,luttv,filut(i,j),scaa
-        enddo
-       enddo
+         enddo
+      enddo
 CCCC Check initialization  (debug)     
 C***********************************************************************
 C END LOOK UP TABLE INITIALIZATION
@@ -1793,8 +1793,7 @@ c analytical expressions and in addition for computing the averaged    c
 c directional reflectances                                             c
 c**********************************************************************c
       if(iwave.ne.-1) then
-        call equivwl(iinf,isup,step,
-     s               wlmoy)
+        call equivwl(iinf,isup,step,wlmoy)
       else
         wlmoy=wl
       endif
@@ -1802,7 +1801,6 @@ c**********************************************************************c
      a      palt,phirad,nt,mu,np,rm,gb,rp,ftray,ipol,xlm1,xlm2,
      a      roatm_fi,nfi,
      a      nfilut,filut,roluts,rolutsq,rolutsu)
-
 
 c     write(6,*) "wlmoy",wlmoy
       if(iaer.ne.0) then
@@ -1812,16 +1810,16 @@ c     write(6,*) "wlmoy",wlmoy
         tamoy=0.
         tamoyp=0. 
       endif
-      call odrayl(wlmoy,
-     s                   trmoy)
+
+      call odrayl(wlmoy,trmoy)
 
       trmoyp=trmoy*ftray
-
 
       if (idatmp.eq.4) then
           trmoyp=trmoy
           tamoyp=tamoy
       endif
+
       if (idatmp.eq.0) then
          trmoyp=0.
          tamoyp=0.
