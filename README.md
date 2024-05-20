@@ -167,130 +167,127 @@ targetaltitude is the DEM/DSM value
 | 74     | MERIS band 02            |[0.442]|Integer<br> |<br>|
 | 75     | MERIS band 03            |[0.489]|Integer<br> |<br>|
 | 76     | MERIS band 04            |[0.509]|Integer<br> |<br>|
+| 77     | MERIS band 05            |[0.559]|Integer<br> |<br>|
+| 78     | MERIS band 06            |[0.619]|Integer<br> |<br>|
+| 79     | MERIS band 07            |[0.664]|Integer<br> |<br>|
+| 80     | MERIS band 08            |[0.681]|Integer<br> |<br>|
+| 81     | MERIS band 09            |[0.708]|Integer<br> |<br>|
+| 82     | MERIS band 10            |[0.753]|Integer<br> |<br>|
+| 83     | MERIS band 11            |[0.760]|Integer<br> |<br>|
+| 84     | MERIS band 12            |[0.778]|Integer<br> |<br>|
+| 85     | MERIS band 13            |[0.865]|Integer<br> |<br>|
+| 86     | MERIS band 14            |[0.885]|Integer<br> |<br>|
+| 87     | MERIS band 15            |[0.900]|Integer<br> |<br>|
+| 88     | GLI band 1               |[0.380]|Integer<br> |1Km|
+| 89     | GLI band 2               |[0.400]|Integer<br> |1Km|
+| 90     | GLI band 3               |[0.412]|Integer<br> |1Km|
+| 91     | GLI band 4               |[0.443]|Integer<br> |1Km|
+| 92     | GLI band 5               |[0.460]|Integer<br> |1Km|
+| 93     | GLI band 6               |[0.490]|Integer<br> |1Km|
+| 94     | GLI band 7               |[0.520]|Integer<br> |1Km|
+| 95     | GLI band 8               |[0.545]|Integer<br> |1Km|
+| 96     | GLI band 9               |[0.565]|Integer<br> |1Km|
+| 97     | GLI band 10              |[0.625]|Integer<br> |1Km|
+| 98     | GLI band 11              |[0.666]|Integer<br> |1Km|
+| 99     | GLI band 12              |[0.680]|Integer<br> |1Km|
+| 100    | GLI band 13              |[0.678]|Integer<br> |1Km|
+| 101    | GLI band 14              |[0.710]|Integer<br> |1Km|
+| 102    | GLI band 15              |[0.710]|Integer<br> |1Km|
+| 103    | GLI band 16              |[0.749]|Integer<br> |1Km|
+| 104    | GLI band 17              |[0.763]|Integer<br> |1Km|
+| 105    | GLI band 18              |[0.865]|Integer<br> |1Km|
+| 106    | GLI band 19              |[0.865]|Integer<br> |1Km|
+| 107    | GLI band 20              |[0.460]|Integer<br> |0.25Km|
+| 108    | GLI band 21              |[0.545]|Integer<br> |0.25Km|
+| 109    | GLI band 22              |[0.660]|Integer<br> |0.25Km|
+| 110    | GLI band 23              |[0.825]|Integer<br> |0.25Km|
+| 111    | GLI band 24              |[1.050]|Integer<br> |1Km|
+| 112    | GLI band 25              |[1.135]|Integer<br> |1Km|
+| 113    | GLI band 26              |[1.240]|Integer<br> |1Km|
+| 114    | GLI band 27              |[1.338]|Integer<br> |1Km|
+| 115    | GLI band 28              |[1.640]|Integer<br> |1Km|
+| 116    | GLI band 29              |[2.210]|Integer<br> |1Km|
+| 117    | GLI band 30              |[3.715]|Integer<br> |1Km|
+| 118    | ALI band 1p              |[0.4225-0.4625]|Integer<br> ||
+| 119    | ALI band 1               |[0.4325-0.550]|Integer<br> ||
+| 120    | ALI band 2               |[0.500-0.630]|Integer<br> ||
+| 121    | ALI band 3               |[0.5755-0.730]|Integer<br> ||
+| 122    | ALI band 4               |[0.7525-0.8375]|Integer<br> ||
+| 123    | ALI band 4p              |[0.8025-0.935]|Integer<br> ||
+| 124    | ALI band 5p              |[1.130-1.345]|Integer<br> ||
+| 125    | ALI band 5               |[1.470-1.820]|Integer<br> ||
+| 126    | ALI band 7               |[1.980-2.530]|Integer<br> ||
+| 127    | ASTER band 1             |[0.485-0.6425]|Integer<br> ||
+| 128    | ASTER band 2             |[0.590-0.730]|Integer<br> ||
+| 129    | ASTER band 3n            |[0.720-0.9075]|Integer<br> ||
+| 130    | ASTER band 3b            |[0.720-0.9225]|Integer<br> ||
+| 131    | ASTER band 4             |[1.570-1.7675]|Integer<br> ||
+| 132    | ASTER band 5             |[2.120-2.2825]|Integer<br> ||
+| 133    | ASTER band 6             |[2.150-2.295]|Integer<br> ||
+| 134    | ASTER band 7             |[2.210-2.390]|Integer<br> ||
+| 135    | ASTER band 8             |[2.250-2.440]|Integer<br> ||
+| 136    | ASTER band 9             |[2.2975-2.4875]|Integer<br> ||
+| 137    | LANDSAT7 ETM band 1      |[0.435-0.52]|Integer<br> ||
+| 138    | LANDSAT7 ETM band 2      |[0.5-0.6225]|Integer<br> ||
+| 139    | LANDSAT7 ETM band 3      |[0.615-0.7025]|Integer<br> ||
+| 140    | LANDSAT7 ETM band 4      |[0.74-0.9125]|Integer<br> ||
+| 141    | LANDSAT7 ETM band 5      |[1.51-1.7875]|Integer<br> ||
+| 142    | LANDSAT7 ETM band 7      |[2.015-2.3775]|Integer<br> ||
+| 143    | HYPBLUE band 1           |[0.4375-0.500]|Integer<br> ||
+| 144    | HYPBLUE band 2           |[0.435-0.52]|Integer<br> ||
+| 145    | VGT band 1               |[0.4175-0.500]|Integer<br> ||
+| 146    | VGT band 2               |[0.5975-0.7675]|Integer<br> ||
+| 147    | VGT band 3               |[0.7325-0.9575]|Integer<br> ||
+| 148    | VGT band 4               |[1.5225-1.800]|Integer<br> ||
+| 149    | VIIRS band M1            |[0.4025-0.4225]|Integer<br> ||
+| 150    | VIIRS band M2            |[0.4350-0.4550]|Integer<br> ||
+| 151    | VIIRS band M3            |[0.4775-0.4975]|Integer<br> ||
+| 152    | VIIRS band M4            |[0.5450-0.5650]|Integer<br> ||
+| 153    | VIIRS band M5            |[0.6625-0.6825]|Integer<br> ||
+| 154    | VIIRS band M6            |[0.7375-0.7525]|Integer<br> ||
+| 155    | VIIRS band M7            |[0.8450-0.8850]|Integer<br> ||
+| 156    | VIIRS band M8            |[1.2300-1.2500]|Integer<br> ||
+| 157    | VIIRS band M9            |[1.3700-1.3850]|Integer<br> ||
+| 158    | VIIRS band M10           |[1.5800-1.6400]|Integer<br> ||
+| 159    | VIIRS band M11           |[2.2250-2.2750]|Integer<br> ||
+| 160    | VIIRS band M12           |[3.6100-3.7900]|Integer<br> ||
+| 161    | VIIRS band I1            |[0.6000-0.6800]|Integer<br> ||
+| 162    | VIIRS band I2            |[0.8450-0.8850]|Integer<br> ||
+| 163    | VIIRS band I3            |[1.5800-1.6400]|Integer<br> ||
+| 164    | VIIRS band I4            |[3.5500-3.9300]|Integer<br> ||
+| 165    | LDCM band 1              |[0.4275-0.4575]|Integer<br> ||
+| 166    | LDCM band 2              |[0.4375-0.5275]|Integer<br> ||
+| 167    | LDCM band 3              |[0.5125-0.6000]|Integer<br> ||
+| 168    | LDCM band 4              |[0.6275-0.6825]|Integer<br> ||
+| 169    | LDCM band 5              |[0.8300-0.8950]|Integer<br> ||
+| 170    | LDCM band 6              |[1.5175-1.6950]|Integer<br> ||
+| 171    | LDCM band 7              |[2.0375-2.3500]|Integer<br> ||
+| 172    | LDCM band 8              |[0.4875-0.6925]|Integer<br> ||
+| 173    | LDCM band 9              |[1.3425-1.4025]|Integer<br> ||
+| 174    | MODISkm band 8           |[0.4025-0.4225]|Integer<br> ||
+| 175    | MODISkm band 9           |[0.4325-0.4500]|Integer<br> ||
+| 176    | MODISkm band 10          |[0.4775-0.4950]|Integer<br> ||
+| 177    | MODISkm band 11          |[0.5200-0.5400]|Integer<br> ||
+| 178    | MODISkm band 12          |[0.5375-0.5550]|Integer<br> ||
+| 179    | MODISkm band 13          |[0.6575-0.6750]|Integer<br> ||
+| 180    | MODISkm band 14          |[0.6675-0.6875]|Integer<br> ||
+| 181    | MODISkm band 15          |[0.7375-0.7575]|Integer<br> ||
+| 182    | MODISkm band 16          |[0.8525-0.8825]|Integer<br> ||
+| 183    | MODISkm band 17          |[0.8725-0.9375]|Integer<br> ||
+| 184    | MODISkm band 18          |[0.9225-0.9475]|Integer<br> ||
+| 185    | MODISkm band 19          |[0.8900-0.9875]|Integer<br> ||
+| 186    | CAVIS band 1             |[0.4275-0.4575]|Integer<br> ||
+| 187    | CAVIS band 2             |[0.4375-0.5275]|Integer<br> ||
+| 188    | CAVIS band 3             |[0.5125-0.6000]|Integer<br> ||
+| 189    | CAVIS band 4             |[0.6275-0.6825]|Integer<br> ||
+| 190    | CAVIS band 5             |[0.8300-0.8950]|Integer<br> ||
+| 191    | CAVIS band 6             |[1.3425-1.4025]|Integer<br> ||
+| 192    | CAVIS band 7             |[1.5175-1.6950]|Integer<br> ||
+| 193    | CAVIS band 8             |[2.0375-2.3500]|Integer<br> ||
+| 194    | CAVIS band 9             |[0.4875-0.6925]|Integer<br> ||
+| 195    | CAVIS band 10            |[0.4875-0.6925]|Integer<br> ||
+| 196    | CAVIS band 11            |[0.5100-0.6200]|Integer<br> ||
+| 197    | DMC band 1               |[0.4875-0.6925]|Integer<br> ||
+| 198    | DMC band 2               |[0.6100-0.7100]|Integer<br> ||
+| 199    | DMC band 3               |[0.7525-0.9275]|Integer<br> ||
 
-c        76  MERIS   band 04           ( 0.509)                        c
-c        77  MERIS   band 05           ( 0.559)                        c
-c        78  MERIS   band 06           ( 0.619)                        c
-c        79  MERIS   band 07           ( 0.664)                        c
-c        80  MERIS   band 08           ( 0.681)                        c
-c        81  MERIS   band 09           ( 0.708)                        c
-c        82  MERIS   band 10          ( 0.753)                         c
-c        83  MERIS   band 11          ( 0.760)                         c
-c        84  MERIS   band 12          ( 0.778)                         c
-c        85  MERIS   band 13          ( 0.865)                         c
-c        86  MERIS   band 14          ( 0.885)                         c
-c        87  MERIS   band 15          ( 0.900)                         c
-c        88  GLI     band 1           (0.380-1km)                      c
-c        89  GLI     band 2           (0.400-1km)                      c
-c        90  GLI     band 3           (0.412-1km)                      c
-c        91  GLI     band 4           (0.443-1km)                      c
-c        92  GLI     band 5           (0.460-1km)                      c
-c        93  GLI     band 6           (0.490-1km)                      c
-c        94  GLI     band 7           (0.520-1km)                      c
-c        95  GLI     band 8           (0.545-1km)                      c
-c        96  GLI     band 9           (0.565-1km)                      c
-c        97  GLI     band 10          (0.625-1km)                      c
-c        98  GLI     band 11          (0.666-1km)                      c
-c        99  GLI     band 12          (0.680-1km)                      c
-c       100  GLI     band 13          (0.678-1km)                      c
-c       101  GLI     band 14          (0.710-1km)                      c
-c       102  GLI     band 15          (0.710-1km)                      c
-c       103  GLI     band 16          (0.749-1km)                      c
-c       104  GLI     band 17          (0.763-1km)                      c
-c       105  GLI     band 18          (0.865-1km)                      c
-c       106  GLI     band 19          (0.865-1km)                      c
-c       107  GLI     band 20          (0.460-0.25km)                   c
-c       108  GLI     band 21          (0.545-0.25km)                   c
-c       109  GLI     band 22          (0.660-0.25km)                   c
-c       110  GLI     band 23          (0.825-0.25km)                   c
-c       111  GLI     band 24          (1.050-1km)                      c
-c       112  GLI     band 25          (1.135-1km)                      c
-c       113  GLI     band 26          (1.240-1km)                      c
-c       114  GLI     band 27          (1.338-1km)                      c
-c       115  GLI     band 28          (1.640-1km)                      c
-c       116  GLI     band 29          (2.210-1km)                      c
-c       117  GLI     band 30          (3.715-1km)                      c
-c       118  ALI     band 1p          (0.4225-0.4625)                  c
-c       119  ALI     band 1           (0.4325-0.550)                   c
-c       120  ALI     band 2           (0.500-0.630)                    c
-c       121  ALI     band 3           (0.5755-0.730)                   c
-c       122  ALI     band 4           (0.7525-0.8375)                  c
-c       123  ALI     band 4p          (0.8025-0.935)                   c         
-c       124  ALI     band 5p          (1.130-1.345)                    c
-c       125  ALI     band 5           (1.470-1.820)                    c         
-c       126  ALI     band 7           (1.980-2.530)                    c         
-c       127  ASTER   band 1           (0.485-0.6425)                   c
-c       128  ASTER   band 2           (0.590-0.730)                    c
-c       129  ASTER   band 3n          (0.720-0.9075)                   c
-c       130  ASTER   band 3b          (0.720-0.9225)                   c
-c       131  ASTER   band 4           (1.570-1.7675)                   c
-c       132  ASTER   band 5           (2.120-2.2825)                   c
-c       133  ASTER   band 6           (2.150-2.295)                    c
-c       134  ASTER   band 7           (2.210-2.390)                    c
-c       135  ASTER   band 8           (2.250-2.440)                    c
-c       136  ASTER   band 9           (2.2975-2.4875)                  c
-c       137  ETM     band 1           (0.435-0.52) 		       c         
-c       138  ETM     band 2           (0.5-0.6225)                     c
-c       139  ETM     band 3           (0.615-0.7025)                   c
-c       140  ETM     band 4           (0.74-0.9125)                    c
-c       141  ETM     band 5           (1.51-1.7875)                    c
-c       142  ETM     band 7           (2.015-2.3775)                   c
-c       143  HYPBLUE band 1           (0.4375-0.500)                   c
-c       144  HYPBLUE band 2           (0.435-0.52)                     c
-c       145  VGT     band 1           (0.4175-0.500)                   c
-c       146  VGT     band 2           (0.5975-0.7675)                  c
-c       147  VGT     band 3           (0.7325-0.9575)                  c
-c       148  VGT     band 4           (1.5225-1.800)                   c
-c       149  VIIRS   band M1          (0.4025-0.4225)                  c
-c       150  VIIRS   band M2          (0.4350-0.4550)                  c 
-c       151  VIIRS   band M3          (0.4775-0.4975)                  c 
-c       152  VIIRS   band M4          (0.5450-0.5650)                  c 
-c       153  VIIRS   band M5          (0.6625-0.6825)                  c 
-c       154  VIIRS   band M6          (0.7375-0.7525)                  c 
-c       155  VIIRS   band M7          (0.8450-0.8850)                  c 
-c       156  VIIRS   band M8          (1.2300-1.2500)                  c 
-c       157  VIIRS   band M9          (1.3700-1.3850)                  c 
-c       158  VIIRS   band M10         (1.5800-1.6400)                  c 
-c       159  VIIRS   band M11         (2.2250-2.2750)                  c
-c       160  VIIRS   band M12         (3.6100-3.7900)                  c 
-c       161  VIIRS   band I1          (0.6000-0.6800)                  c 
-c       162  VIIRS   band I2          (0.8450-0.8850)                  c 
-c       163  VIIRS   band I3          (1.5800-1.6400)                  c 
-c       164  VIIRS   band I4          (3.5500-3.9300)                  c
-c       165  LDCM    band 1          (0.4275-0.4575)                   c
-c       166  LDCM    band 2          (0.4375-0.5275)                   c
-c       167  LDCM    band 3          (0.5125-0.6000)                   c
-c       168  LDCM    band 4          (0.6275-0.6825)                   c
-c       169  LDCM    band 5          (0.8300-0.8950)                   c
-c       170  LDCM    band 6          (1.5175-1.6950)                   c
-c       171  LDCM    band 7          (2.0375-2.3500)                   c
-c       172  LDCM    band 8          (0.4875-0.6925)                   c
-c       173  LDCM    band 9          (1.3425-1.4025)                   c
-c       174  MODISkm band 8          (0.4025-0.4225)                   c
-c       175  MODISkm band 9          (0.4325-0.4500)                   c
-c       176  MODISkm band 10         (0.4775-0.4950)                   c
-c       177  MODISkm band 11         (0.5200-0.5400)                   c
-c       178  MODISkm band 12         (0.5375-0.5550)                   c
-c       179  MODISkm band 13         (0.6575-0.6750)                   c
-c       180  MODISkm band 14         (0.6675-0.6875)                   c
-c       181  MODISkm band 15         (0.7375-0.7575)                   c
-c       182  MODISkm band 16         (0.8525-0.8825)                   c
-c       183  MODISkm band 17         (0.8725-0.9375)                   c
-c       184  MODISkm band 18         (0.9225-0.9475)                   c
-c       185  MODISkm band 19         (0.8900-0.9875)                   c
-c       186  CAVIS   band 1          (0.4275-0.4575)                   c
-c       187  CAVIS   band 2          (0.4375-0.5275)                   c
-c       188  CAVIS   band 3          (0.5125-0.6000)                   c
-c       189  CAVIS   band 4          (0.6275-0.6825)                   c
-c       190  CAVIS   band 5          (0.8300-0.8950)                   c
-c       191  CAVIS   band 6          (1.3425-1.4025)                   c
-c       192  CAVIS   band 7          (1.5175-1.6950)                   c
-c       193  CAVIS   band 8          (2.0375-2.3500)                   c
-c       194  CAVIS   band 9          (0.4875-0.6925)                   c
-c       195  CAVIS   band 10         (0.4875-0.6925)                   c
-c       196  CAVIS   band 11         (0.5100-0.6200)                   c
-c       197  DMC     band 1          (0.4875-0.6925)                   c
-c       198  DMC    band 2           (0.6100-0.7100)                   c
-c       199  DMC    band 3           (0.7525-0.9275)                   c
-c  note: wl has to be in micrometer                                    c
-c**********************************************************************c
