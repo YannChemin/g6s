@@ -2062,93 +2062,136 @@ c**********************************************************************c
 c     uniform or non-uniform surface conditions                        c
 c**********************************************************************c
 
-      read(iread,*) inhomo
+      !read(iread,*) inhomo
+      inhomo = inputhomogeneousidcode
 
-      if (inhomo < 0) then
-        goto 30
-      else if (inhomo == 0) then
-        goto 30
+      if (inhomo <= 0) then
+        !30  read(iread,*) idirec
+        idirec = inputdirectional
       else
-        goto 31
+c**********************************************************************c
+c     non-uniform conditions with lambertian conditions                c
+c**********************************************************************c
+        read(iread,*) igrou1,igrou2,rad
+        if (igrou1 < 0) then
+            read(iread,*) (rocl(i),i=iinf,isup)
+        else if (igrou1 == 0) then
+            read(iread,*) roc
+            do l=iinf,isup
+                rocl(l)=roc
+            end do
+        else
+            if(igrou1.eq.1) call vegeta(rocl)
+            if(igrou1.eq.2) call clearw(rocl)
+            if(igrou1.eq.3) call sand  (rocl)
+            if(igrou1.eq.4) call lakew (rocl)
+        end if
+        if (igrou2 < 0) then
+            read(iread,*) (roel(i),i=iinf,isup)
+        else if (igrou2 == 0) then
+            read(iread,*) roe
+            do l=iinf,isup
+                roel(l)=roe
+            end do
+        else
+            if(igrou2.eq.1) call vegeta(roel)
+            if(igrou2.eq.2) call clearw(roel)
+            if(igrou2.eq.3) call sand  (roel)
+            if(igrou2.eq.4) call lakew (roel)
+        end if
       end if
 
-  30  read(iread,*) idirec
+c**********************************************************************c
+c     uniform surface with lambertian conditions                       c
+c**********************************************************************c
+      if (inhomo.le.0 .and. idirec.le.0) then
+        !21  read(iread,*) igroun
+        igroun = inputgroundlambertian
 
-      if (idirec < 0) then
-        goto 21
-      else if (idirec == 0) then
-        goto 21
-      else
-        goto 25
+        if (igroun < 0) then
+            !29  read(iread,*) nwlinf,nwlsup
+            nwlinf = 
+            nwlsup = 
+            niinf=(nwlinf-.25)/0.0025+1.5
+            nisup=(nwlsup-.25)/0.0025+1.5
+            read(iread,*) (rocl(i),i=niinf,nisup)
+            do l=iinf,isup
+                roel(l)=rocl(l)
+            end do
+        else if (igroun == 0) then
+            !32  read(iread,*) ro
+            ro = 
+            do l=iinf,isup
+                rocl(l)=ro
+            end do
+            do l=iinf,isup
+                roel(l)=rocl(l)
+            end do
+        else
+            if(igroun.eq.1) call vegeta(rocl)
+            if(igroun.eq.2) call clearw(rocl)
+            if(igroun.eq.3) call sand  (rocl)
+            if(igroun.eq.4) call lakew (rocl)
+            do l=iinf,isup
+                roel(l)=rocl(l)
+            end do
+        end if
       end if
- 
+
 c**********************************************************************c
 c     uniform conditions with brdf conditions                          c
 c**********************************************************************c
-c
- 25   read(iread,*) ibrdf
+      if (idirec > 0) then
+        !25   read(iread,*) ibrdf
+        ibrdf = inputbrdf
 c*********************************************************************c
-      if (ibrdf < 0) then
-        goto 23
-      else if (ibrdf == 0) then
-        goto 23
-      else
-        goto 24
-      end if
+        if (ibrdf <= 0) then
 c**********************************************************************c
 c     brdf from in-situ measurements                                   c
 c**********************************************************************c
-  23  do k=1,13
-        read(iread,*) (brdfdats(10-j+1,k),j=1,10)
-      end do
-      do k=1,13
-        read(iread,*) (brdfdatv(10-j+1,k),j=1,10)
-      end do
-      read(iread,*) albbrdf
-      read(iread,*) rodir
-      rm(-mu)=phirad
-      rm(mu)=xmuv
-      rm(0)=xmus
-      call brdfgrid(mu,np,rm,rp,brdfdats,angmu,angphi,
-     s                 brdfints)
-      rm(-mu)=2.*pi-phirad
-      rm(mu)=xmus
-      rm(0)=xmuv
-      call brdfgrid(mu,np,rm,rp,brdfdatv,angmu,angphi,
-     s                 brdfintv)
-      brdfints(mu,1)=rodir
-       do l=iinf,isup
-          sbrdf(l)=rodir
-          enddo
-      go to 69
+            do k=1,13
+                read(iread,*) (brdfdats(10-j+1,k),j=1,10)
+            end do
+            do k=1,13
+                read(iread,*) (brdfdatv(10-j+1,k),j=1,10)
+            end do
+            read(iread,*) albbrdf
+            read(iread,*) rodir
+            rm(-mu)=phirad
+            rm(mu)=xmuv
+            rm(0)=xmus
+            call brdfgrid(mu,np,rm,rp,brdfdats,angmu,angphi,brdfints)
+            rm(-mu)=2.*pi-phirad
+            rm(mu)=xmus
+            rm(0)=xmuv
+            call brdfgrid(mu,np,rm,rp,brdfdatv,angmu,angphi,brdfintv)
+            brdfints(mu,1)=rodir
+            do l=iinf,isup
+                sbrdf(l)=rodir
+            enddo
+        end if
+      end if
 c**********************************************************************c
-c     brdf from hapke's model                                          c
+c     brdf from hapke's model (ibrdf=1)                                c
 c**********************************************************************c
-  24  if(ibrdf.eq.1) then
+      if(ibrdf.eq.1) then
         read(iread,*) par1,par2,par3,par4
-
         srm(-1)=phirad
         srm(1)=xmuv
         srm(0)=xmus
-        call hapkbrdf(par1,par2,par3,par4,1,1,srm,srp,
-     s           sbrdftmp)
+        call hapkbrdf(par1,par2,par3,par4,1,1,srm,srp,sbrdftmp)
         do l=iinf,isup
            sbrdf(l)=sbrdftmp(1,1)
         enddo
-
         rm(-mu)=phirad
         rm(mu)=xmuv
         rm(0)=xmus
-        call hapkbrdf(par1,par2,par3,par4,mu,np,rm,rp,
-     s           brdfints)
+        call hapkbrdf(par1,par2,par3,par4,mu,np,rm,rp,brdfints)
         rm(-mu)=2.*pi-phirad
         rm(mu)=xmus
         rm(0)=xmuv
-        call hapkbrdf(par1,par2,par3,par4,mu,np,rm,rp,
-     s           brdfintv)
-        call hapkalbe(par1,par2,par3,par4,
-     s       albbrdf)
-        go to 69
+        call hapkbrdf(par1,par2,par3,par4,mu,np,rm,rp,brdfintv)
+        call hapkalbe(par1,par2,par3,par4,albbrdf)
       endif
 c**********************************************************************c
 c     brdf from verstraete et al's model                               c
@@ -2159,116 +2202,88 @@ c**********************************************************************c
         options(2)=1
         read(iread,*) (struct(i),i=1,4)
         read(iread,*) (optics(i),i=1,3)
-
         srm(-1)=phirad
         srm(1)=xmuv
         srm(0)=xmus
-        call versbrdf(options,optics,struct,1,1,srm,srp,
-     s           sbrdftmp)
+        call versbrdf(options,optics,struct,1,1,srm,srp,sbrdftmp)
         do l=iinf,isup
            sbrdf(l)=sbrdftmp(1,1)
         enddo
-
         rm(-mu)=phirad
         rm(mu)=xmuv
         rm(0)=xmus
-        call versbrdf(options,optics,struct,mu,np,rm,rp,
-     s           brdfints)
+        call versbrdf(options,optics,struct,mu,np,rm,rp,brdfints)
         rm(-mu)=2.*pi-phirad
         rm(mu)=xmus
         rm(0)=xmuv
-        call versbrdf(options,optics,struct,mu,np,rm,rp,
-     s           brdfintv)
-        call versalbe(options,optics,struct,
-     s       albbrdf)
-        go to 69
+        call versbrdf(options,optics,struct,mu,np,rm,rp,brdfintv)
+        call versalbe(options,optics,struct,albbrdf)
       endif
 c**********************************************************************c
 c     brdf from Roujean et al's model                                  c
 c**********************************************************************c
       if(ibrdf.eq.3) then
         read(iread,*) par1,par2,par3
-
         srm(-1)=phirad
         srm(1)=xmuv
         srm(0)=xmus
-        call roujbrdf(par1,par2,par3,1,1,srm,srp,
-     s           sbrdftmp)
+        call roujbrdf(par1,par2,par3,1,1,srm,srp,sbrdftmp)
         do l=iinf,isup
            sbrdf(l)=sbrdftmp(1,1)
-           enddo
-
+        enddo
         rm(-mu)=phirad
         rm(mu)=xmuv
         rm(0)=xmus
-        call roujbrdf(par1,par2,par3,mu,np,rm,rp,
-     s           brdfints)
+        call roujbrdf(par1,par2,par3,mu,np,rm,rp,brdfints)
         rm(-mu)=2.*pi-phirad
         rm(mu)=xmus
         rm(0)=xmuv
-        call roujbrdf(par1,par2,par3,mu,np,rm,rp,
-     s           brdfintv)
-        call roujalbe(par1,par2,par3,
-     s       albbrdf)
-        go to 69
+        call roujbrdf(par1,par2,par3,mu,np,rm,rp,brdfintv)
+        call roujalbe(par1,par2,par3,albbrdf)
       endif
 c**********************************************************************c
 c     brdf from walthall et al's model
 c**********************************************************************c
       if(ibrdf.eq.4) then
         read(iread,*) par1,par2,par3,par4
-
         srm(-1)=phirad
         srm(1)=xmuv
         srm(0)=xmus
-        call waltbrdf(par1,par2,par3,par4,1,1,srm,srp,
-     s           sbrdftmp)
+        call waltbrdf(par1,par2,par3,par4,1,1,srm,srp,sbrdftmp)
         do l=iinf,isup
            sbrdf(l)=sbrdftmp(1,1)
         enddo
-
         rm(-mu)=phirad
         rm(mu)=xmuv
         rm(0)=xmus
-        call waltbrdf(par1,par2,par3,par4,mu,np,rm,rp,
-     s           brdfints)
+        call waltbrdf(par1,par2,par3,par4,mu,np,rm,rp,brdfints)
         rm(-mu)=2.*pi-phirad
         rm(mu)=xmus
         rm(0)=xmuv
-        call waltbrdf(par1,par2,par3,par4,mu,np,rm,rp,
-     s           brdfintv)
-        call waltalbe(par1,par2,par3,par4,
-     s       albbrdf)
-        go to 69
+        call waltbrdf(par1,par2,par3,par4,mu,np,rm,rp,brdfintv)
+        call waltalbe(par1,par2,par3,par4,albbrdf)
       endif
 c**********************************************************************c
 c     brdf from minnaert's model                                       c
 c**********************************************************************c
       if(ibrdf.eq.5) then
         read(iread,*) par1,par2
-
         srm(-1)=phirad
         srm(1)=xmuv
         srm(0)=xmus
-        call minnbrdf(par1,par2,1,1,srm,
-     s           sbrdftmp)
+        call minnbrdf(par1,par2,1,1,srm,sbrdftmp)
         do l=iinf,isup
            sbrdf(l)=sbrdftmp(1,1)
         enddo
-
         rm(-mu)=phirad
         rm(mu)=xmuv
         rm(0)=xmus
-        call minnbrdf(par1,par2,mu,np,rm,
-     s           brdfints)
+        call minnbrdf(par1,par2,mu,np,rm,brdfints)
         rm(-mu)=2.*pi-phirad
         rm(mu)=xmus
         rm(0)=xmuv
-        call minnbrdf(par1,par2,mu,np,rm,
-     s           brdfintv)
-        call minnalbe(par1,par2,
-     s       albbrdf)
-        go to 69
+        call minnbrdf(par1,par2,mu,np,rm,brdfintv)
+        call minnalbe(par1,par2,albbrdf)
       endif
  
 c**********************************************************************c
@@ -2278,39 +2293,28 @@ c**********************************************************************c
         read(iread,*) pws,phi_wind,xsal,pcl
         if (xsal.lt.0.001)xsal=34.3
         paw=phi0-phi_wind
-
         do l=iinf,isup
            srm(-1)=phirad
            srm(1)=xmuv
            srm(0)=xmus
            wl=.25+(l-1)*step 
-           call oceabrdf(pws,paw,xsal,pcl,wl,rfoam,rwat,rglit,
-     s         1,1,srm,srp,
-     s           sbrdftmp)
-     
+           call oceabrdf(pws,paw,xsal,pcl,wl,rfoam,rwat,rglit,1,1,srm,srp,sbrdftmp)
            rfoaml(l)=rfoam
            rwatl(l)=rwat
            rglitl(l)=rglit
            sbrdf(l)=sbrdftmp(1,1)
         enddo
-
         rm(-mu)=phirad
         rm(mu)=xmuv
         rm(0)=xmus
-        call oceabrdf(pws,paw,xsal,pcl,wlmoy,rfoam,rwat,rglit,
-     s          mu,np,rm,rp,
-     s          brdfints)
+        call oceabrdf(pws,paw,xsal,pcl,wlmoy,rfoam,rwat,rglit,mu,np,rm,rp,brdfints)
         rm(-mu)=2.*pi-phirad
         rm(mu)=xmus
         rm(0)=xmuv
-        call oceabrdf(pws,paw,xsal,pcl,wlmoy,rfoam,rwat,rglit,
-     s          mu,np,rm,rp,
-     s          brdfintv)
-        call oceaalbe(pws,paw,xsal,pcl,wlmoy,
-     s       albbrdf)
-        go to 69
+        call oceabrdf(pws,paw,xsal,pcl,wlmoy,rfoam,rwat,rglit,mu,np,rm,rp,brdfintv)
+        call oceaalbe(pws,paw,xsal,pcl,wlmoy,albbrdf)
       endif
-c
+
 c**********************************************************************c
 c     brdf from Iaquinta and Pinty model
 c**********************************************************************c
@@ -2318,29 +2322,22 @@ c**********************************************************************c
         read(iread,*) pild,pihs
         read(iread,*) pxLt,pc
         read(iread,*) pRl,pTl,pRs
-
         srm(-1)=phirad
         srm(1)=xmuv
         srm(0)=xmus
-        call iapibrdf(pild,pxlt,prl,ptl,prs,pihs,pc,1,1,srm,srp,
-     s           sbrdftmp)
+        call iapibrdf(pild,pxlt,prl,ptl,prs,pihs,pc,1,1,srm,srp,sbrdftmp)
         do l=iinf,isup
            sbrdf(l)=sbrdftmp(1,1)
         enddo
-
         rm(-mu)=phirad
         rm(mu)=xmuv
         rm(0)=xmus
-        call iapibrdf(pild,pxlt,prl,ptl,prs,pihs,pc,mu,np,rm,rp,
-     s           brdfints)
+        call iapibrdf(pild,pxlt,prl,ptl,prs,pihs,pc,mu,np,rm,rp,brdfints)
         rm(-mu)=2.*pi-phirad
         rm(mu)=xmus
         rm(0)=xmuv
-        call iapibrdf(pild,pxlt,prl,ptl,prs,pihs,pc,mu,np,rm,rp,
-     s           brdfintv)
-        call iapialbe(pild,pxlt,prl,ptl,prs,pihs,pc,
-     s       albbrdf)
-        go to 69
+        call iapibrdf(pild,pxlt,prl,ptl,prs,pihs,pc,mu,np,rm,rp,brdfintv)
+        call iapialbe(pild,pxlt,prl,ptl,prs,pihs,pc,albbrdf)
       endif
 c
 c**********************************************************************c
@@ -2348,217 +2345,179 @@ c     brdf from Rahman model
 c**********************************************************************c
       if(ibrdf.eq.8) then
         read(iread,*) par1,par2,par3
-
         srm(-1)=phirad
         srm(1)=xmuv
         srm(0)=xmus
-        call rahmbrdf(par1,par2,par3,1,1,srm,srp,
-     s           sbrdftmp)
+        call rahmbrdf(par1,par2,par3,1,1,srm,srp,sbrdftmp)
         do l=iinf,isup
            sbrdf(l)=sbrdftmp(1,1)
         enddo
-
         rm(-mu)=phirad
         rm(mu)=xmuv
         rm(0)=xmus
-        call rahmbrdf(par1,par2,par3,mu,np,rm,rp,
-     s           brdfints)
+        call rahmbrdf(par1,par2,par3,mu,np,rm,rp,brdfints)
         rm(-mu)=2.*pi-phirad
         rm(mu)=xmus
         rm(0)=xmuv
-        call rahmbrdf(par1,par2,par3,mu,np,rm,rp,
-     s           brdfintv)
-        call rahmalbe(par1,par2,par3,
-     s       albbrdf)
-c call for ground boundary condition in OSSURF   
+        call rahmbrdf(par1,par2,par3,mu,np,rm,rp,brdfintv)
+        call rahmalbe(par1,par2,par3,albbrdf)
+        !call for ground boundary condition in OSSURF   
         rm(-mu)=phirad
         rm(mu)=xmuv
         rm(0)=xmus          
-        call rahmbrdffos(par1,par2,par3,mu,rm,rosur,
-     s           wfisur,fisur)
-c        write(6,*) "rosur ",rosur
-        go to 69
+        call rahmbrdffos(par1,par2,par3,mu,rm,rosur,wfisur,fisur)
+        !write(6,*) "rosur ",rosur
       endif
-c
+
 c**********************************************************************c
 c     brdf from kuusk's msrm model                                     c
 c**********************************************************************c
       if(ibrdf.eq.9) then
          read(iread,*) uli,eei,thmi,sli
-         read(iread,*) cabi,cwi,vaii,rnci,rsl1i
- 
+         read(iread,*) cabi,cwi,vaii,rnci,rsl1i 
          do l=iinf,isup
            srm(-1)=phirad
            srm(1)=xmuv
            srm(0)=xmus
            wl=.25+(l-1)*step 
-           call akbrdf(eei,thmi,uli,sli,rsl1i,wl,rnci,cabi,cwi,vaii
-     s      ,1,1,srm,srp,sbrdftmp)
+           call akbrdf(eei,thmi,uli,sli,rsl1i,wl,rnci,cabi,cwi,vaii,1,1,srm,srp,sbrdftmp)
            sbrdf(l)=sbrdftmp(1,1)
          enddo
- 
          rm(-mu)=phirad
          rm(mu)=xmuv
          rm(0)=xmus
-         call akbrdf(eei,thmi,uli,sli,rsl1i,wlmoy,rnci,cabi,cwi,vaii
-     &            ,mu,np,rm,rp,brdfints)
+         call akbrdf(eei,thmi,uli,sli,rsl1i,wlmoy,rnci,cabi,cwi,vaii,mu,np,rm,rp,brdfints)
          rm(-mu)=2.*pi-phirad
          rm(mu)=xmus
          rm(0)=xmuv
-         call akbrdf(eei,thmi,uli,sli,rsl1i,wlmoy,rnci,cabi,cwi,vaii
-     &            ,mu,np,rm,rp,brdfintv)
-c
-         call akalbe
-*    &   (eei,thmi,uli,sli,rsl1i,wlmoy,rnci,cabi,cwi,vaii,albbrdf)
-     &   (albbrdf)
-         go to 69
+         call akbrdf(eei,thmi,uli,sli,rsl1i,wlmoy,rnci,cabi,cwi,vaii,mu,np,rm,rp,brdfintv)
+         call akalbe(albbrdf)
+         !call akalbe(eei,thmi,uli,sli,rsl1i,wlmoy,rnci,cabi,cwi,vaii,albbrdf)
       endif
-c
+
 c**********************************************************************c
 c     brdf from MODIS BRDF   model                                     c
 c**********************************************************************c
       if(ibrdf.eq.10) then
-         read(iread,*)p1,p2,p3
- 
+         read(iread,*)p1,p2,p3 
          srm(-1)=phirad
          srm(1)=xmuv
          srm(0)=xmus
-         call modisbrdf(p1,p2,p3
-     s      ,1,1,srm,srp,sbrdftmp)
+         call modisbrdf(p1,p2,p3,1,1,srm,srp,sbrdftmp)
          do l=iinf,isup
            sbrdf(l)=sbrdftmp(1,1)
          enddo
- 
          rm(-mu)=phirad
          rm(mu)=xmuv
          rm(0)=xmus
-         call modisbrdf(p1,p2,p3
-     &            ,mu,np,rm,rp,brdfints)
+         call modisbrdf(p1,p2,p3,mu,np,rm,rp,brdfints)
          rm(-mu)=2.*pi-phirad
          rm(mu)=xmus
          rm(0)=xmuv
-         call modisbrdf(p1,p2,p3
-     &            ,mu,np,rm,rp,brdfintv)
-c
-         call modisalbe(p1,p2,p3
-     &                 ,albbrdf)
-c call for ground boundary condition in OSSURF   
+         call modisbrdf(p1,p2,p3,mu,np,rm,rp,brdfintv)
+         call modisalbe(p1,p2,p3,albbrdf)
+         !call for ground boundary condition in OSSURF   
          rm(-mu)=phirad
          rm(mu)=xmuv
          rm(0)=xmus          
-         call modisbrdffos(p1,p2,p3,mu,rm,
-     s       rosur,wfisur,fisur)
-         go to 69
+         call modisbrdffos(p1,p2,p3,mu,rm,rosur,wfisur,fisur)
       endif
-c
+
 c**********************************************************************c
 c     brdf from ROSSLIMAIGNAN BRDF   model                                     c
 c**********************************************************************c
       if(ibrdf.eq.11) then
-         read(iread,*)p1,p2,p3
- 
+         read(iread,*)p1,p2,p3 
          srm(-1)=phirad
          srm(1)=xmuv
          srm(0)=xmus
-         call rlmaignanbrdf(p1,p2,p3
-     s      ,1,1,srm,srp,sbrdftmp)
+         call rlmaignanbrdf(p1,p2,p3,1,1,srm,srp,sbrdftmp)
          do l=iinf,isup
            sbrdf(l)=sbrdftmp(1,1)
          enddo
-c	   stop
-   
-c	 
          rm(-mu)=phirad
          rm(mu)=xmuv
          rm(0)=xmus
-         call rlmaignanbrdf(p1,p2,p3
-     &            ,mu,np,rm,rp,brdfints)
+         call rlmaignanbrdf(p1,p2,p3,mu,np,rm,rp,brdfints)
          rm(-mu)=2.*pi-phirad
          rm(mu)=xmus
          rm(0)=xmuv
-         call rlmaignanbrdf(p1,p2,p3
-     &            ,mu,np,rm,rp,brdfintv)
-c
-         call rlmaignanalbe(p1,p2,p3
-     &                 ,albbrdf)
-     
-c        write(6,*) "GOT TILL HERE "
-c call for ground boundary condition in OSSURF   
+         call rlmaignanbrdf(p1,p2,p3,mu,np,rm,rp,brdfintv)
+         call rlmaignanalbe(p1,p2,p3,albbrdf)
+         !call for ground boundary condition in OSSURF   
          rm(-mu)=phirad
          rm(mu)=xmuv
          rm(0)=xmus          
-         call rlmaignanbrdffos(p1,p2,p3,mu,rm,
-     s       rosur,wfisur,fisur)
-c         do i=0,mu
-c	 do j=1,mu
-c	 do k=1,83
-c         write(6,*) i,j,k,rosur(i,j,k),acos(rm(i))*180./pi,acos(rm(j))*180./pi,fisur(k)*180./pi+180.
-c	 enddo
-c	 enddo
-c	 enddo
-         go to 69
+         call rlmaignanbrdffos(p1,p2,p3,mu,rm,rosur,wfisur,fisur)
+         !do i=0,mu
+         !do j=1,mu
+         !do k=1,83
+         !write(6,*) i,j,k,rosur(i,j,k),acos(rm(i))*180./pi,acos(rm(j))*180./pi,fisur(k)*180./pi+180.
+         !enddo
+         !enddo
+         !enddo
       endif
-c
-c
-   69 continue
+
+      ! Common BRDF processing
+      if (idirec.gt.0) then
 c**********************************************************************c
 c compute the downward irradiance for a sun at thetas and then at      c
 c tetav                                                                c
 c**********************************************************************c
-c call os to compute downward radiation field for robar
-      rm(-mu)=-xmuv
-      rm(mu)=xmuv
-      rm(0)=-xmus
-      spalt=1000.
-c      write(6,*) iaer_prof,tamoy,trmoy,pizmoy,tamoyp,trmoyp,spalt,
+        !call os to compute downward radiation field for robar
+        rm(-mu)=-xmuv
+        rm(mu)=xmuv
+        rm(0)=-xmus
+        spalt=1000.
+c       write(6,*) iaer_prof,tamoy,trmoy,pizmoy,tamoyp,trmoyp,spalt,
 c     s               phirad,nt,mu,np,rm,gb,rp,
 c     s                     xlmus,xlphim,nfi,rolut
-      call os(iaer_prof,tamoy,trmoy,pizmoy,tamoyp,trmoyp,spalt,
+        call os(iaer_prof,tamoy,trmoy,pizmoy,tamoyp,trmoyp,spalt,
      s               phirad,nt,mu,np,rm,gb,rp,
      s                     xlmus,xlphim,nfi,rolut)
 c       write(6,*) xlmus
-      romixatm=(xlmus(-mu,1)/xmus)
-c      write(6,*) "romix atm", romix,tamoy,trmoy,phirad
-c call os to compute downward radiation field for robarp
-      if (idatmp.ne.0) then
+        romixatm=(xlmus(-mu,1)/xmus)
+c       write(6,*) "romix atm", romix,tamoy,trmoy,phirad
+        !call os to compute downward radiation field for robarp
+        if (idatmp.ne.0) then
+            rm(-mu)=-xmus
+            rm(mu)=xmus
+            rm(0)=-xmuv
+            call os(iaer_prof,tamoyp,trmoyp,pizmoy,tamoyp,trmoyp,spalt,
+     s               phirad,nt,mu,np,rm,gb,rp,
+     s               xlmuv,xlphim,nfi,rolut)
+        endif
+        !call ossurf to compute the actual brdf coupling  
+        rm(-mu)=-xmuv
+        rm(mu)=xmuv
+        rm(0)=-xmus
+        spalt=1000.
+        call ossurf(iaer_prof,tamoyp,trmoyp,pizmoy,tamoyp,trmoyp,spalt,
+     s               phirad,nt,mu,np,rm,gb,rp,rosur,wfisur,fisur,
+     s               xlsurf,xlphim,nfi,rolutsurf)
+        romixsur=(xlsurf(-mu,1)/xmus)-romixatm
+c       write(6,*) "romix surf", romix
+        !call ISO (twice) to compute the spherical albedo for the equivalent wavelength
+        !and diffuse and direct transmission at equivalent vavelength
+        rm(-mu)=-xmuv
+        rm(mu)=xmuv
+        rm(0)=xmus
+        call iso(iaer_prof,tamoyp,trmoyp,pizmoy,tamoyp,trmoyp,spalt,
+     a           nt,mu,rm,gb,lxtrans)
+        ludiftt=lxtrans(1)-exp(-(tamoyp+trmoyp)/xmuv)
+        ludirtt=exp(-(tamoyp+trmoyp)/xmuv)
         rm(-mu)=-xmus
         rm(mu)=xmus
-        rm(0)=-xmuv
-        call os(iaer_prof,tamoyp,trmoyp,pizmoy,tamoyp,trmoyp,spalt,
-     s               phirad,nt,mu,np,rm,gb,rp,
-     s                     xlmuv,xlphim,nfi,rolut)
-      endif
-c call ossurf to compute the actual brdf coupling  
-      rm(-mu)=-xmuv
-      rm(mu)=xmuv
-      rm(0)=-xmus
-      spalt=1000.
-      call ossurf(iaer_prof,tamoyp,trmoyp,pizmoy,tamoyp,trmoyp,spalt,
-     s               phirad,nt,mu,np,rm,gb,rp,rosur,wfisur,fisur,
-     s                     xlsurf,xlphim,nfi,rolutsurf)
-      romixsur=(xlsurf(-mu,1)/xmus)-romixatm
-c      write(6,*) "romix surf", romix
-c call ISO (twice) to compute the spherical albedo for the equivalent wavelength
-c and diffuse and direct transmission at equivalent vavelength
-      rm(-mu)=-xmuv
-      rm(mu)=xmuv
-      rm(0)=xmus
-      call iso(iaer_prof,tamoyp,trmoyp,pizmoy,tamoyp,trmoyp,spalt,
+        rm(0)=xmus
+        call iso(iaer_prof,tamoyp,trmoyp,pizmoy,tamoyp,trmoyp,spalt,
      a           nt,mu,rm,gb,lxtrans)
-      ludiftt=lxtrans(1)-exp(-(tamoyp+trmoyp)/xmuv)
-      ludirtt=exp(-(tamoyp+trmoyp)/xmuv)
-      rm(-mu)=-xmus
-      rm(mu)=xmus
-      rm(0)=xmus
-      call iso(iaer_prof,tamoyp,trmoyp,pizmoy,tamoyp,trmoyp,spalt,
-     a           nt,mu,rm,gb,lxtrans)
-      lddiftt=lxtrans(1)-exp(-(tamoyp+trmoyp)/xmus)
-      lddirtt=exp(-(tamoyp+trmoyp)/xmus)
-      lsphalbt=lxtrans(0)*2.
+        lddiftt=lxtrans(1)-exp(-(tamoyp+trmoyp)/xmus)
+        lddirtt=exp(-(tamoyp+trmoyp)/xmus)
+        lsphalbt=lxtrans(0)*2.
 
 c       write(6,*) "sphalbt ddiftt ddirtt udiftt udirtt",
 c     a   lsphalbt,lddiftt,lddirtt,ludiftt,ludirtt,xmus,xmuv
-c      stop
+c       stop
 c**********************************************************************c
 c the downward irradiance was computed for a sun at thetas and         c
 c several viewing directions (mu zenith times np azimuth). then, the   c
@@ -2566,21 +2525,21 @@ c code computes the product of ldown*brdf integrated over the total    c
 c hemisphere and gives the averaged directional reflectance after the  c
 c normalization. the resulting reflectance is named robar              c
 c**********************************************************************c
-      robar1=0.
-      xnorm1=0.
-c     write(6,*) xlmus
-      do j=1,np
-        rob=0.
-        xnor=0.
-        do k=1,mu-1
-          rdown=xlmus(-k,j)
-          rdir=brdfintv(k,j)
-          rob=rob+rdown*rdir*rm(k)*gb(k)
-          xnor=xnor+rdown*rm(k)*gb(k)
+        robar1=0.
+        xnorm1=0.
+c       write(6,*) xlmus
+        do j=1,np
+            rob=0.
+            xnor=0.
+            do k=1,mu-1
+                rdown=xlmus(-k,j)
+                rdir=brdfintv(k,j)
+                rob=rob+rdown*rdir*rm(k)*gb(k)
+                xnor=xnor+rdown*rm(k)*gb(k)
+            end do
+            robar1=robar1+rob*gp(j)
+            xnorm1=xnorm1+xnor*gp(j)
         end do
-        robar1=robar1+rob*gp(j)
-        xnorm1=xnorm1+xnor*gp(j)
-      end do
  
 c**********************************************************************c
 c the downward irradiance was computed for a sun at thetav and         c
@@ -2589,148 +2548,70 @@ c code computes the product of ldown*brdf integrated over the total    c
 c hemisphere and gives the averaged directional reflectance after the  c
 c normalization. the resulting reflectance is named robarp             c
 c**********************************************************************c
-      robar2=0.
-      xnorm2=0.
-      do j=1,np
-        rob=0.
-        xnor=0.
-        do k=1,mu-1
-          rdown=xlmuv(-k,j)
-          rdir=brdfints(k,j)
-          rob=rob+rdown*rdir*rm(k)*gb(k)
-          xnor=xnor+rdown*rm(k)*gb(k)
+        robar2=0.
+        xnorm2=0.
+        do j=1,np
+            rob=0.
+            xnor=0.
+            do k=1,mu-1
+                rdown=xlmuv(-k,j)
+                rdir=brdfints(k,j)
+                rob=rob+rdown*rdir*rm(k)*gb(k)
+                xnor=xnor+rdown*rm(k)*gb(k)
+            end do
+            robar2=robar2+rob*gp(j)
+            xnorm2=xnorm2+xnor*gp(j)
         end do
-        robar2=robar2+rob*gp(j)
-        xnorm2=xnorm2+xnor*gp(j)
-      end do
 
-c      Write(6,*) "ROBAR",robar1,robar2,xnorm1,xnorm2,romix 
-c  robard is assumed equal to albbrdf
-c     print 301,brdfints(mu,1),robar1,xnorm1,
+c       Write(6,*) "ROBAR",robar1,robar2,xnorm1,xnorm2,romix 
+        !robard is assumed equal to albbrdf
+c       print 301,brdfints(mu,1),robar1,xnorm1,
 c    s       robar2,xnorm2,albbrdf
-c     print 301,robar1/xnorm1,robar2/xnorm2
-c     print 301,betal(0)/3,pizmoy
-c301  format(6(f10.4,2x))
-c501  format(5(i10,2x))
-      rbar=robar1/xnorm1
-      rbarp=robar2/xnorm2
-      rbarc=rbar*lddiftt*ludirtt
-      rbarpc=rbarp*ludiftt*lddirtt
-      rdirc=sbrdftmp(1,1)*ludirtt*lddirtt
-      write(6,*) "romixsur,rbarc,rbarpc,rdirc",romixsur,rbarc,rbarpc,rdirc
+c       print 301,robar1/xnorm1,robar2/xnorm2
+c       print 301,betal(0)/3,pizmoy
+c301    format(6(f10.4,2x))
+c501    format(5(i10,2x))
+        rbar=robar1/xnorm1
+        rbarp=robar2/xnorm2
+        rbarc=rbar*lddiftt*ludirtt
+        rbarpc=rbarp*ludiftt*lddirtt
+        rdirc=sbrdftmp(1,1)*ludirtt*lddirtt
+        write(6,*) "romixsur,rbarc,rbarpc,rdirc",romixsur,rbarc,rbarpc,rdirc
  
-      coefc=-(romixsur-rbarc-rbarpc-rdirc)
-c     write(6,*) " lddiftt,ludiftt ", lddiftt,ludiftt 
-      coefb=lddiftt*ludiftt
-      coefa=(lddiftt+lddirtt)*(ludiftt+ludirtt)*lsphalbt
-     a  /(1.-lsphalbt*albbrdf)
-      write(6,*) "a,b,c",coefa,coefb,coefc
-      write(6,*) "discri2 ",(coefb*coefb-4*coefa*coefc)
-      discri=sqrt(coefb*coefb-4*coefa*coefc)
-      rbard=(-coefb+discri)/(2*coefa)
-      Write(6,*) "rbard albbrdf 1rst iteration", rbard,albbrdf
-      coefa=(lddiftt+lddirtt)*(ludiftt+ludirtt)*lsphalbt
-     a  /(1.-lsphalbt*rbard)
-      write(6,*) "a,b,c",coefa,coefb,coefc
-      write(6,*) "discri2 ",(coefb*coefb-4*coefa*coefc)
-      discri=sqrt(coefb*coefb-4*coefa*coefc)
-      rbard=(-coefb+discri)/(2*coefa)
-      Write(6,*) "rbard albbrdf 2nd iteration", rbard,albbrdf
+        coefc=-(romixsur-rbarc-rbarpc-rdirc)
+c       write(6,*) " lddiftt,ludiftt ", lddiftt,ludiftt 
+        coefb=lddiftt*ludiftt
+        coefa=(lddiftt+lddirtt)*(ludiftt+ludirtt)*lsphalbt
+     a      /(1.-lsphalbt*albbrdf)
+        write(6,*) "a,b,c",coefa,coefb,coefc
+        write(6,*) "discri2 ",(coefb*coefb-4*coefa*coefc)
+        discri=sqrt(coefb*coefb-4*coefa*coefc)
+        rbard=(-coefb+discri)/(2*coefa)
+        Write(6,*) "rbard albbrdf 1rst iteration", rbard,albbrdf
+        coefa=(lddiftt+lddirtt)*(ludiftt+ludirtt)*lsphalbt
+     a      /(1.-lsphalbt*rbard)
+        write(6,*) "a,b,c",coefa,coefb,coefc
+        write(6,*) "discri2 ",(coefb*coefb-4*coefa*coefc)
+        discri=sqrt(coefb*coefb-4*coefa*coefc)
+        rbard=(-coefb+discri)/(2*coefa)
+        Write(6,*) "rbard albbrdf 2nd iteration", rbard,albbrdf
       
-      do l=iinf,isup
-        rocl(l)=sbrdf(l)
-        roel(l)=sbrdf(l)
-        robar(l)=robar1/xnorm1
-        if (idatmp.ne.0) then
-          robarp(l)=robar2/xnorm2
-        else
-          robarp(l)=0.
-          xnorm2=1.
-          robar2=0.
-        endif
-        robard(l)=albbrdf
-        robard(l)=rbard
-      end do
-      
-      go to 34
- 
-c**********************************************************************c
-c     uniform surface with lambertian conditions                       c
-c**********************************************************************c
+        do l=iinf,isup
+            rocl(l)=sbrdf(l)
+            roel(l)=sbrdf(l)
+            robar(l)=robar1/xnorm1
+            if (idatmp.ne.0) then
+                robarp(l)=robar2/xnorm2
+            else
+                robarp(l)=0.
+                xnorm2=1.
+                robar2=0.
+            endif
+            robard(l)=albbrdf
+            robard(l)=rbard
+        end do
+      end if ! end of common idirec > 0  
 
-  21  read(iread,*) igroun
-
-      if (igroun < 0) then
-        goto 29
-      else if (igroun == 0) then
-        goto 32
-      else
-        goto 33
-      end if
-      
-  29  read(iread,*) nwlinf,nwlsup
-      niinf=(nwlinf-.25)/0.0025+1.5
-      nisup=(nwlsup-.25)/0.0025+1.5
-      read(iread,*) (rocl(i),i=niinf,nisup)
-      goto 36
-
-  32  read(iread,*) ro
-
-      do l=iinf,isup
-        rocl(l)=ro
-      end do
-      goto 36
-  33  if(igroun.eq.1) call vegeta(rocl)
-      if(igroun.eq.2) call clearw(rocl)
-      if(igroun.eq.3) call sand  (rocl)
-      if(igroun.eq.4) call lakew (rocl)
-   36 do l=iinf,isup
-        roel(l)=rocl(l)
-      end do
-      go to 34
- 
-c**********************************************************************c
-c     non-uniform conditions with lambertian conditions                c
-c**********************************************************************c
- 31   read(iread,*) igrou1,igrou2,rad
-      if (igrou1 < 0) then
-        goto 59
-      else if (igrou1 == 0) then
-        goto 60
-      else
-        goto 63
-      end if
-  59  read(iread,*) (rocl(i),i=iinf,isup)
-      goto 61
-  60  read(iread,*) roc
-      do l=iinf,isup
-        rocl(l)=roc
-      end do
-      go to 61
-  63  if(igrou1.eq.1) call vegeta(rocl)
-      if(igrou1.eq.2) call clearw(rocl)
-      if(igrou1.eq.3) call sand  (rocl)
-      if(igrou1.eq.4) call lakew (rocl)
-   61 if (igrou2 < 0) then
-        goto 66
-      else if (igrou2 == 0) then
-        goto 62
-      else
-        goto 65
-      end if
-  66  read(iread,*) (roel(i),i=iinf,isup)
-      goto 34
-  62  read(iread,*) roe
-      do l=iinf,isup
-        roel(l)=roe
-      end do
-      go to 34
-  65  if(igrou2.eq.1) call vegeta(roel)
-      if(igrou2.eq.2) call clearw(roel)
-      if(igrou2.eq.3) call sand  (roel)
-      if(igrou2.eq.4) call lakew (roel)
-   34 continue
- 
 c**********************************************************************c
 c                                                                      c
 c       irapp   that input parameter allows to activate atmospheric    c

@@ -293,11 +293,6 @@ targetaltitude is the DEM/DSM value
 
 ### inhomo: ground reflectance (type)
 
-
-c*********************************************************************c
-c     inhomo        ground reflectance (type)                          c
-c                   ------------------                                 c
-c                                                                      c
 c  you consider an homogeneous surface:                                c
 c     enter - inhomo=0                                                 c
 c                you may consider directional surface  effects         c
@@ -377,7 +372,7 @@ c            same for a sun which would be at thetav. in addition, the c
 c            spherical albedo of the surface has to be specified ,as   c
 C            well as the observed reflectance in the selected geometry c
 c           rodir(sun zenith,view zenith, relative azimuth).	       c
-c		 						       c
+c		 						                                       c
 c        you also may select one of the following models               c
 c         1  hapke model                                               c
 c             the parameters are: om,af,s0,h                           c
